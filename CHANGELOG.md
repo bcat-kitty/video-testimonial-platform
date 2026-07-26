@@ -1,5 +1,30 @@
 # Changelog
 
+## 2026-07-26 13:10 - Drop Drizzle, fix db setup, trim README, host a live demo
+
+**Commits:** `bef4f33` refactor: drop Drizzle for plain SQL, fix db setup, trim README,
+`83dd837` docs: add live demo instance to README
+
+- **Drizzle removed.** `lib/store.ts` now talks to Postgres through plain SQL via postgres.js
+  (`transform: postgres.camel`). The schema is `lib/db/schema.sql`, row types are hand-written in
+  `lib/db/types.ts`, and `drizzle-orm`/`drizzle-kit` are gone (two dependencies, -1,616 net lines).
+- **Fixed a shipped going-live bug:** `drizzle-kit push` never read `.env.local`, but
+  `.env.example` told people to put `DATABASE_URL` there, so the documented setup path failed.
+  Replaced with `npm run db:setup` (`scripts/db-setup.mjs`), which loads `.env.local`/`.env`
+  itself and applies `schema.sql` idempotently.
+- **Verified against a real Postgres 16** (docker): setup twice, request create, token-matched
+  submission (verified flag), request close, approval read, public API shape, nudge query.
+- **README trimmed 245 → 213 lines:** cut the persona section, the pipeline table that repeated
+  the diagram, and the standalone premise essay; merged the two scope sections; fixed the clone
+  URL which had regressed to the wrong handle.
+- **Live demo hosted:** https://vouch-pi-ochre.vercel.app under the personal Vercel scope (no
+  company trace in the URL), demo mode, admin password `vouch-demo` published in the README.
+  GitHub repo connected for auto-deploy on push. `ADMIN_PASSWORD` and `NEXT_PUBLIC_APP_URL` set
+  in production.
+
+Files: `lib/store.ts`, `lib/db/{schema.sql,types.ts,index.ts}`, `scripts/db-setup.mjs`,
+`package.json`, `README.md`, `CLAUDE.md`; deleted `drizzle.config.ts`, `lib/db/schema.ts`
+
 ## 2026-07-26 09:15 - Public launch
 
 **Commits:** `0dd6c3c` docs: rewrite README for launch, `88b81ee` docs: tighten README wording
