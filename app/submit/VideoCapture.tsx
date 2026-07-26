@@ -192,7 +192,7 @@ export default function VideoCapture({ onChange, maxBytes = DEFAULT_MAX }: Video
     <div className="space-y-4">
       {state === 'idle' && (
         <div className="space-y-3">
-          <div className="flex flex-col gap-3 sm:flex-row">
+          <div className="flex flex-wrap gap-3">
             {canRecord && (
               <button type="button" onClick={requestCamera} className="v-btn">
                 <span aria-hidden="true">●</span> Record now
@@ -203,9 +203,7 @@ export default function VideoCapture({ onChange, maxBytes = DEFAULT_MAX }: Video
               <input type="file" accept="video/*" onChange={handleFileFallback} className="sr-only" />
             </label>
           </div>
-          <p className="text-xs text-zinc-500">
-            Any format works. Phone, laptop, whatever you have.
-          </p>
+          <p className="text-xs text-zinc-500">Any format works. Phone, laptop, whatever you have.</p>
         </div>
       )}
 
@@ -213,14 +211,14 @@ export default function VideoCapture({ onChange, maxBytes = DEFAULT_MAX }: Video
 
       {(state === 'preview' || state === 'recording') && (
         <div className="space-y-3">
-          <div className="relative flex max-h-[60vh] justify-center overflow-hidden rounded-xl bg-black">
+          <div className="relative flex max-h-[28vh] sm:max-h-[38vh] justify-center overflow-hidden rounded-xl bg-black">
             <video
               ref={livePreviewRef}
               autoPlay
               muted
               playsInline
               disablePictureInPicture
-              className="block h-auto max-h-[60vh] w-auto max-w-full"
+              className="block h-auto max-h-[28vh] sm:max-h-[38vh] w-auto max-w-full"
               style={{ transform: 'scaleX(-1)' }}
             />
             {state === 'recording' && (
@@ -259,15 +257,17 @@ export default function VideoCapture({ onChange, maxBytes = DEFAULT_MAX }: Video
             )}
           </div>
 
-          <p className="text-xs text-zinc-500">
-            Aim for 60 to 120 seconds, all three answers in one take. No need to be perfect.
-          </p>
         </div>
       )}
 
       {state === 'review' && recordedUrl && (
         <div className="space-y-3">
-          <video src={recordedUrl} controls playsInline className="block w-full rounded-xl bg-black" />
+          <video
+            src={recordedUrl}
+            controls
+            playsInline
+            className="mx-auto block max-h-[28vh] sm:max-h-[38vh] w-auto max-w-full rounded-xl bg-black"
+          />
           <div className="flex items-center gap-4">
             <button type="button" onClick={reset} className="v-btn-secondary">
               Record again

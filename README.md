@@ -81,7 +81,7 @@ That drives the emails, the recording page, the admin, and the AI prompt. There 
 
 There are only three, and `npm run dev` shows you all of them on demo data.
 
-**`/submit`** is what your customer sees. Pick video or text, fill in who you are, then record in the browser.
+**`/submit`** is what your customer sees. One question per screen, no scrolling, on a phone or a laptop. They record in the browser, or write it if they would rather type. The whole thing is four screens in video mode.
 
 <p align="center">
   <img src="docs/screenshots/submit-questions.png" alt="The recording page, showing the three questions and the record button" width="900">

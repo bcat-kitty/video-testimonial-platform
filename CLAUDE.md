@@ -119,6 +119,10 @@ components/vouch/      What users copy into their own site. Keep dependency-free
   makes the CRM-webhook integration safe to wire blindly. Keep it.
 - **`components/vouch/` has no imports from the rest of the repo.** It gets copied into strangers'
   codebases. The moment it imports `@/lib/anything`, copy-paste breaks.
+- **The recording page never scrolls.** `app/submit/` is one question per screen, sized to fit a
+  375px-wide phone and a laptop without page scroll. If you add a field, put it on its own step or
+  take one away; do not grow a screen past the fold. Validation is per-step so nobody is warned
+  about a field they cannot see.
 
 ### Swapping a provider
 

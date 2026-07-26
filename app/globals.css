@@ -31,6 +31,18 @@ body {
   @apply mb-2 block text-sm font-semibold text-zinc-900;
 }
 
+/* Compact variants, used by the stepped recording form so each screen fits
+   without scrolling. 16px text on inputs is deliberate: anything smaller and
+   iOS Safari zooms the page on focus. */
+.v-input-sm {
+  @apply w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-base text-zinc-900 placeholder:text-zinc-400;
+  @apply focus:border-accent focus:ring-2 focus:ring-accent/25 focus:outline-none;
+}
+
+.v-label-sm {
+  @apply mb-1 block text-xs font-semibold text-zinc-700;
+}
+
 .v-hint {
   @apply mb-2 text-xs text-zinc-500;
 }
