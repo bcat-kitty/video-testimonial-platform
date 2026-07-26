@@ -1,5 +1,31 @@
 # Changelog
 
+## 2026-07-26 18:25 - Video enabled on the demo, one question per screen
+
+**Commits:** `4da7b67` feat: idempotent requests, new tagline, `fa42adb` feat: GitHub stars,
+`7fc45cd` feat: one question per screen on the recording page
+
+- **Video works on the live demo.** It had been silently falling back to text mode because no
+  Vercel Blob store existed. Created `vouch-demo` (public, iad1) and connected it to the project,
+  which set `BLOB_READ_WRITE_TOKEN` across all environments. Confirmed live: the recording page
+  now opens in video mode at step 1/4.
+- **Recording page rebuilt as a stepped card.** The old single long form showed the customer
+  everything they owed before they had given anything. Now: 4 screens in video mode, 6 in write
+  mode (one question per screen), progress bar, Back, per-step validation so nobody is warned
+  about a field they cannot see. Switching Record/Write keeps answers already given.
+- **No page scroll, verified.** Measured with headless Chrome at 375x667, 390x844 and 1440x900,
+  on every step, including with the camera preview live. Zero overflow at all three.
+- **Idempotent requests.** One open request per email, enforced in both `POST /api/requests` and
+  the admin form, so a CRM webhook can be wired blindly and a double-fire is a no-op.
+- **Tagline:** "Testimonials that fill themselves", described as a self-hosted automated
+  testimonial system. Applied to README, homepage hero, package.json, and the repo description.
+- **Live GitHub stars and forks** on the instance homepage (cached 1h, degrades to a plain link)
+  plus shields.io badges in the README.
+
+Files: `app/submit/{TestimonialForm,VideoCapture}.tsx`, `app/globals.css`, `app/page.tsx`,
+`app/api/requests/route.ts`, `app/admin/actions.ts`, `README.md`, `CLAUDE.md`, `package.json`,
+`docs/screenshots/submit-questions.png`
+
 ## 2026-07-26 13:10 - Drop Drizzle, fix db setup, trim README, host a live demo
 
 **Commits:** `bef4f33` refactor: drop Drizzle for plain SQL, fix db setup, trim README,
