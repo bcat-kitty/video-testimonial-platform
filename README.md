@@ -1,8 +1,8 @@
 # Vouch
 
-**Send a link. Your customer records a video. AI writes the testimonial. You approve it. It renders on your site.**
+**Testimonials that fill themselves.**
 
-Vouch is a self-hosted testimonial engine. You deploy one instance, it exposes a public read-only API, and you copy a component into your own codebase that reads from it. Your content, your database, your domain.
+Vouch is a self-hosted, automated testimonial system. Send a link, your customer records a video, AI writes the testimonial, you approve it, it renders on your site. You deploy one instance, it exposes a public read-only API, and you copy a component into your own codebase that reads from it. Your content, your database, your domain.
 
 The premise is simple: almost nobody will write you three good paragraphs, but almost everybody will talk to their phone for ninety seconds. So Vouch asks for a video and does the writing itself.
 
@@ -160,9 +160,9 @@ The seven-day nudge runs off a daily cron. `vercel.json` already declares it, so
 
 ---
 
-## Sending requests programmatically
+## The switch: one API call from your CRM
 
-The admin has a form, but anything can send a request:
+The admin has a form, but the way Vouch is meant to be used is one HTTP call, fired by whatever system knows a project just closed:
 
 ```bash
 curl -X POST https://your-instance/api/requests \
@@ -171,7 +171,13 @@ curl -X POST https://your-instance/api/requests \
   -d '{"email":"jane@acme.com","name":"Jane","customMessage":"Loved building the rollout with you."}'
 ```
 
-It responds with the request id and the recording link, whether or not the email went out. Hook it to the moment a project closes in your CRM and testimonial collection stops being something you remember to do.
+That is the whole integration on the collection side, and it is built to be wired up blindly:
+
+- **Idempotent.** One open request per email. If your CRM double-fires the webhook, the second call returns the existing request instead of emailing your customer twice.
+- **The follow-up is handled.** One automatic nudge after seven days, then it stops. You never chase anyone.
+- **It always answers with the recording link,** whether or not the email went out, so an unconfigured mailer degrades to you sending the link yourself.
+
+Hook it to the project-closed event in your CRM and testimonial collection stops being something you remember to do.
 
 ---
 

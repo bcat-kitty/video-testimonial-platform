@@ -3,10 +3,11 @@
 import { randomBytes } from 'node:crypto';
 import { revalidatePath } from 'next/cache';
 import { isAuthenticated, login, logout } from '@/lib/auth';
-import { sendRequestEmail } from '@/lib/email';
+import { buildSubmitLink, sendRequestEmail } from '@/lib/email';
 import {
   createRequest,
   deleteTestimonial,
+  findOpenRequest,
   getTestimonial,
   updateRequest,
   updateTestimonial,
@@ -37,6 +38,15 @@ export async function sendRequestAction(_prev: ActionState, formData: FormData):
 
   const email = String(formData.get('email') || '').trim().toLowerCase();
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return { error: 'That email does not look right.' };
+
+  // Same idempotency as POST /api/requests: one open request per email.
+  const open = await findOpenRequest({ email });
+  if (open) {
+    return {
+      error: 'There is already an open request for this email. Use Nudge on it instead.',
+      link: buildSubmitLink({ token: open.token, name: open.name, email: open.email, category: open.category }),
+    };
+  }
 
   const token = randomBytes(24).toString('base64url');
   const created = await createRequest({

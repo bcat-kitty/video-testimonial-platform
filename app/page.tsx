@@ -35,10 +35,10 @@ export default async function HomePage() {
       <main>
         <section className="mx-auto max-w-3xl px-4 pt-20 pb-8 text-center">
           <p className="mb-4 text-xs font-semibold tracking-widest text-accent uppercase">
-            Self-hosted testimonial engine
+            Automated testimonial system
           </p>
           <h1 className="mb-6 text-4xl leading-tight font-bold tracking-tight text-zinc-900 sm:text-5xl">
-            Send a link. They record a video. You get a written testimonial.
+            Testimonials that fill themselves.
           </h1>
           <p className="mx-auto mb-10 max-w-2xl text-lg leading-relaxed text-zinc-600">
             Vouch emails your customer a personal recording link, captures their video in the browser,

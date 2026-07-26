@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": false,
   "license": "MIT",
-  "description": "Self-hosted video testimonial engine. Send a link, your customer records a video, AI writes the testimonial, you approve it, it renders on your site.",
+  "description": "Testimonials that fill themselves. Self-hosted automated testimonial system: send a link, your customer records a video, AI writes the testimonial, you approve it, it renders on your site.",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

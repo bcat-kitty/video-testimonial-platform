@@ -114,6 +114,9 @@ components/vouch/      What users copy into their own site. Keep dependency-free
   The row is saved first, so a failed transcription leaves a recoverable testimonial, not a lost one.
 - **One nudge, ever.** `resendCount` only advances when the email actually sent, so a mail outage
   cannot silently burn everyone's single follow-up. Do not add a second automatic nudge.
+- **One open request per email.** Creating a request is idempotent: both `POST /api/requests` and
+  the admin form return the existing open request instead of creating a duplicate. This is what
+  makes the CRM-webhook integration safe to wire blindly. Keep it.
 - **`components/vouch/` has no imports from the rest of the repo.** It gets copied into strangers'
   codebases. The moment it imports `@/lib/anything`, copy-paste breaks.
 
