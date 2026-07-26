@@ -1,0 +1,46 @@
+@import 'tailwindcss';
+
+/**
+ * Vouch ships one accent color and neutral greys. Override --vouch-accent
+ * (here, or on :root in your own stylesheet) and everything follows: buttons,
+ * links, focus rings, the recording indicator.
+ */
+:root {
+  --vouch-accent: #4f46e5;
+  --vouch-accent-contrast: #ffffff;
+}
+
+@theme inline {
+  --color-accent: var(--vouch-accent);
+  --color-accent-contrast: var(--vouch-accent-contrast);
+}
+
+body {
+  background: #ffffff;
+  color: #18181b;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Inputs share one look so the recording form stays visually quiet. */
+.v-input {
+  @apply w-full rounded-lg border border-zinc-300 bg-white px-4 py-3 text-base text-zinc-900 placeholder:text-zinc-400;
+  @apply focus:border-accent focus:ring-2 focus:ring-accent/25 focus:outline-none;
+}
+
+.v-label {
+  @apply mb-2 block text-sm font-semibold text-zinc-900;
+}
+
+.v-hint {
+  @apply mb-2 text-xs text-zinc-500;
+}
+
+.v-btn {
+  @apply inline-flex items-center justify-center gap-2 rounded-lg px-6 py-3 text-sm font-semibold transition-opacity;
+  @apply bg-accent text-accent-contrast hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50;
+}
+
+.v-btn-secondary {
+  @apply inline-flex items-center justify-center gap-2 rounded-lg border border-zinc-300 bg-white px-5 py-3 text-sm font-semibold text-zinc-700 transition-colors;
+  @apply hover:border-zinc-400 hover:text-zinc-900 disabled:cursor-not-allowed disabled:opacity-50;
+}

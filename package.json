@@ -1,0 +1,34 @@
+{
+  "name": "vouch",
+  "version": "0.1.0",
+  "private": false,
+  "license": "MIT",
+  "description": "Self-hosted video testimonial engine. Send a link, your customer records a video, AI writes the testimonial, you approve it, it renders on your site.",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "db:push": "drizzle-kit push",
+    "db:generate": "drizzle-kit generate"
+  },
+  "dependencies": {
+    "@vercel/blob": "^2.3.3",
+    "drizzle-orm": "^0.45.2",
+    "next": "16.1.1",
+    "openai": "^6.32.0",
+    "postgres": "^3.4.5",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "resend": "^6.9.3"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "drizzle-kit": "^0.31.10",
+    "tailwindcss": "^4.1.18",
+    "typescript": "^5"
+  }
+}
