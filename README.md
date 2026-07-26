@@ -70,7 +70,7 @@ The write-up is three short paragraphs in the customer's own words: the situatio
 
 Two details worth knowing:
 
-- Submissions that match a request you sent get a **verified** flag, so you can tell a real customer from a stranger who found the form.
+- **Only people you asked can submit.** Every request carries a private token in its link, and by default that token is required: no token means no upload slot and no submission. Set `inviteOnly: false` if you would rather run a permanently open "leave us a testimonial" page. Submissions carrying a valid token also get a **verified** flag.
 - Unanswered requests get one automatic nudge after seven days, then Debrief leaves them alone. The counter only advances when the email actually sends, so a mail outage cannot silently burn everyone's single follow-up.
 
 ---
@@ -103,6 +103,7 @@ export const debriefConfig: DebriefConfig = {
     title: 'Share your experience',
     intro: 'Two minutes. A short video works best, and one take covers all three questions.',
   },
+  inviteOnly: true,   // only people you sent a link to can submit
   accent: '#4F46E5',
 };
 ```
@@ -115,7 +116,7 @@ That drives the emails, the recording page, the admin, and the AI prompt. There 
 
 There are only three, and `npm run dev` shows you all of them on demo data.
 
-**`/submit`** is what your customer sees. One question per screen, no scrolling, on a phone or a laptop. They record in the browser, or write it if they would rather type. The whole thing is four screens in video mode.
+**`/submit`** is what your customer sees, and it only opens with the token from their own link. One question per screen, no scrolling, on a phone or a laptop. They record in the browser, or write it if they would rather type. The whole thing is four screens in video mode.
 
 <p align="center">
   <img src="docs/screenshots/submit-questions.png" alt="The recording page, showing the three questions and the record button" width="900">

@@ -19,6 +19,19 @@ export interface DebriefConfig {
   questions: { before: string; after: string; recommend: string };
   /** Copy on the public recording page. */
   recordingPage: { eyebrow: string; title: string; intro: string };
+  /**
+   * Only people you actually asked can submit. Default, and the safe one.
+   *
+   * Every request you send carries a private token in its link. With this on,
+   * that token is required: no token means no upload slot and no submission, so
+   * a stranger who finds your /submit URL gets a polite 403 instead of a row in
+   * your review queue and a hole in your storage bill.
+   *
+   * Set it to false if you want a permanently open "leave us a testimonial"
+   * page that anyone can find and fill in. Everything still lands unapproved,
+   * so nothing reaches your site without you, but you own the spam.
+   */
+  inviteOnly: boolean;
   /** Accent color. Also settable at runtime via the --debrief-accent CSS variable. */
   accent: string;
 }
@@ -45,6 +58,8 @@ export const debriefConfig: DebriefConfig = {
     intro:
       'Two minutes. A short video works best, and you can answer all three questions in one take. Your story helps other people decide.',
   },
+
+  inviteOnly: true,
 
   accent: '#4F46E5',
 };

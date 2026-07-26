@@ -1,5 +1,7 @@
 import { handleUpload, type HandleUploadBody } from '@vercel/blob/client';
 import { NextResponse } from 'next/server';
+import { debriefConfig } from '@/debrief.config';
+import { findOpenRequest } from '@/lib/store';
 
 export const runtime = 'nodejs';
 
@@ -7,6 +9,11 @@ export const runtime = 'nodejs';
  * Issues a short-lived token so the browser uploads the video straight to
  * blob storage, never through this server. That is what keeps a 100MB phone
  * recording from hitting a function body limit.
+ *
+ * Under `inviteOnly` this route will not hand out a slot without the token from
+ * a real, still-open request. That matters more here than anywhere else: this
+ * is the one endpoint that spends your money, and an unguarded one is an open
+ * invitation to fill someone's bucket with 150MB files.
  *
  * Swapping storage: replace this route and the `upload()` call in
  * app/submit/TestimonialForm.tsx with your S3/R2 presigned-URL equivalent.
@@ -59,10 +66,16 @@ export async function POST(request: Request): Promise<NextResponse> {
     const jsonResponse = await handleUpload({
       body,
       request,
-      onBeforeGenerateToken: async (pathname) => {
+      onBeforeGenerateToken: async (pathname, clientPayload) => {
         // Keeps this route from being used as a general-purpose file dump.
         if (!pathname.startsWith('testimonials/')) {
           throw new Error('uploads must use the testimonials/ prefix');
+        }
+        if (debriefConfig.inviteOnly) {
+          const token = clientPayload?.trim();
+          if (!token || !(await findOpenRequest({ token }))) {
+            throw new Error('a valid recording link is required to upload');
+          }
         }
         return {
           allowedContentTypes: ALLOWED_CONTENT_TYPES,

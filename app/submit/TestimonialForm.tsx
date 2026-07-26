@@ -157,6 +157,9 @@ export default function TestimonialForm({ uploadsEnabled }: { uploadsEnabled: bo
         access: 'public',
         handleUploadUrl: '/api/upload',
         contentType,
+        // The recording link's token. Under inviteOnly the server will not issue
+        // an upload slot without it.
+        clientPayload: token,
       });
       return blob.url;
     };

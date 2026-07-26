@@ -1,5 +1,27 @@
 # Changelog
 
+## 2026-07-26 22:40 - Invite only by default
+
+Anyone who found a bare `/submit` URL could post a testimonial and, worse, claim an upload slot.
+The submission landed unapproved so it could never reach a website, but the upload endpoint is the
+one that spends the operator's money, and it was handing out 150MB slots to strangers.
+
+The token that has always been in the recording link is now required, not advisory. No token means
+no upload slot and no submission. `debrief.config.ts` gets `inviteOnly`, defaulting to `true`, and
+setting it to `false` restores the old open-form behaviour for anyone who wants a permanent
+"leave us a testimonial" page.
+
+`/submit` with no token now renders an explanatory page rather than letting someone fill in the
+whole form and hit a 403 at the end. The demo mints a real request and redirects to its real
+token, so it satisfies the check rather than bypassing it, and reuses the open invite instead of
+collecting a row per visitor.
+
+Verified: stranger submission 403, stranger upload refused, valid token grants both, demo
+redirects and self-heals after each submission.
+
+Files: `debrief.config.ts`, `app/api/{testimonials,upload}/route.ts`, `app/submit/page.tsx`,
+`app/submit/TestimonialForm.tsx`, `README.md`, `CLAUDE.md`
+
 ## 2026-07-26 22:05 - Document the CRM loop, and close an API hole the demo bypass opened
 
 `GET /api/requests` has existed since v1 and was never documented. It is the read side of the CRM

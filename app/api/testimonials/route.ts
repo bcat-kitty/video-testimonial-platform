@@ -29,9 +29,14 @@ type Body = {
 /**
  * POST /api/testimonials
  *
- * Public on purpose: the person submitting is a customer, not a user. The
- * token from their emailed link is what proves who they are, and a submission
- * without one still lands, it just does not get the verified flag.
+ * Unauthenticated on purpose: the person submitting is a customer, not a user,
+ * and will never have an account. The token from their emailed link is what
+ * proves who they are.
+ *
+ * Under `inviteOnly` (the default) that token is required, so only people you
+ * actually asked can post. Turn it off in debrief.config.ts and the page
+ * becomes an open "leave us a testimonial" form; submissions without a token
+ * then land unverified rather than being rejected.
  */
 export async function POST(request: Request) {
   try {
@@ -74,6 +79,16 @@ export async function POST(request: Request) {
 
     // A matching open request is what makes this a verified customer.
     const matched = await findOpenRequest({ token, email });
+
+    if (debriefConfig.inviteOnly && !matched) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'This recording link is not valid any more. Ask for a new one and we will send it over.',
+        },
+        { status: 403 },
+      );
+    }
 
     const created = await createTestimonial({
       name,

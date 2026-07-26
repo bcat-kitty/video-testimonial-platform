@@ -143,6 +143,12 @@ components/debrief/      What users copy into their own site. Keep dependency-fr
 
 ### Invariants, do not break these
 
+- **`inviteOnly` is the default, and it gates two routes.** `POST /api/testimonials` rejects a
+  submission with no matching open request, and `POST /api/upload` will not issue a blob token
+  without one. The upload guard is the one that matters most, since it is the only endpoint that
+  spends the operator's money. `/submit` with no token renders an explanatory page instead of the
+  form, and in demo mode it mints a real request and redirects, which satisfies the check rather
+  than bypassing it. If you add another route that writes or spends, gate it the same way.
 - **`approved` is the only publish gate.** Nothing reaches the public API without it. If you add a
   new read path, filter on it.
 - **Email never goes public.** `lib/public-shape.ts` is a whitelist, not a blacklist. Adding a
