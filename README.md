@@ -2,6 +2,10 @@
 
 **Testimonials that fill themselves.**
 
+[![Stars](https://img.shields.io/github/stars/anurieli/vouch?style=flat&color=4F46E5)](https://github.com/anurieli/vouch/stargazers)
+[![Forks](https://img.shields.io/github/forks/anurieli/vouch?style=flat&color=4F46E5)](https://github.com/anurieli/vouch/forks)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+
 Vouch is a self-hosted, automated testimonial system. Send a link, your customer records a video, AI writes the testimonial, you approve it, it renders on your site. You deploy one instance, it exposes a public read-only API, and you copy a component into your own codebase that reads from it. Your content, your database, your domain.
 
 The premise is simple: almost nobody will write you three good paragraphs, but almost everybody will talk to their phone for ninety seconds. So Vouch asks for a video and does the writing itself.
