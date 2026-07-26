@@ -12,7 +12,7 @@ Vouch is a self-hosted testimonial engine. You deploy one instance, it exposes a
 
 ## This is v1
 
-Vouch is small and finished at what it does. It collects video testimonials, turns them into text, gates them behind your approval, and serves them to your site. That loop works end to end today, including the parts that usually break: recording on a phone, uploading a 100MB file, and rendering on a site that knows nothing about this repo.
+Vouch is small, and complete at the job it does. It collects video testimonials, turns them into text, gates them behind your approval, and serves them to your site. That loop works end to end today, including the parts that usually break: recording on a phone, uploading a 100MB file, and rendering on a site that knows nothing about this repo.
 
 The scope below is chosen, not missing by accident. Each of these is a place where a general solution would have cost more than it returned at this size.
 
@@ -41,7 +41,7 @@ flowchart LR
   F --> G["Component on<br/>your own site"]
 ```
 
-Approval is the only step that asks anything of you. The customer never makes an account, never installs anything, and never waits on the transcription, which runs after their page has already said thank you.
+Two of those steps need you: sending the request and approving the result. Everything between them is automatic. The customer never makes an account, never installs anything, and never waits on the transcription, which runs after their page has already said thank you.
 
 ---
 
