@@ -198,24 +198,55 @@ The seven-day nudge runs off a daily cron. `vercel.json` already declares it, so
 
 ---
 
-## The switch: one API call from your CRM
+## Wiring it to your CRM
 
-The admin has a form, but the way Debrief is meant to be used is one HTTP call, fired by whatever system knows a project just closed:
+The admin has a form, but the way Debrief is meant to be used is from whatever system already knows a project just closed. Three endpoints, and that is the entire integration surface.
+
+| | Endpoint | Auth | What it is for |
+|---|---|---|---|
+| **Ask** | `POST /api/requests` | Bearer | Fire this on your project-closed event. |
+| **Track** | `GET /api/requests` | Bearer | Who you have asked, and where each one stands. |
+| **Show** | `GET /api/public/testimonials` | None | What came back and got approved. This is what your site reads. |
+
+Bearer auth is `Authorization: Bearer $ADMIN_PASSWORD`. The public read has no auth and never will; see the note at the end of this section.
+
+**Ask.** One call, safe to wire blindly:
 
 ```bash
 curl -X POST https://your-instance/api/requests \
   -H "Authorization: Bearer $ADMIN_PASSWORD" \
   -H "Content-Type: application/json" \
-  -d '{"email":"jane@acme.com","name":"Jane","customMessage":"Loved building the rollout with you."}'
+  -d '{"email":"jane@acme.com","name":"Jane","category":"consulting","customMessage":"Loved building the rollout with you."}'
 ```
-
-That is the whole integration on the collection side, and it is built to be wired up blindly:
 
 - **Idempotent.** One open request per email. If your CRM double-fires the webhook, the second call returns the existing request instead of emailing your customer twice.
 - **The follow-up is handled.** One automatic nudge after seven days, then it stops. You never chase anyone.
 - **It always answers with the recording link,** whether or not the email went out, so an unconfigured mailer degrades to you sending the link yourself.
 
-Hook it to the project-closed event in your CRM and testimonial collection stops being something you remember to do.
+**Track.** The other half, and the one that makes this a loop rather than a fire-and-forget:
+
+```bash
+curl https://your-instance/api/requests -H "Authorization: Bearer $ADMIN_PASSWORD"
+```
+
+```json
+{
+  "requests": [
+    { "id": "...", "email": "jane@acme.com", "name": "Jane",
+      "status": "pending", "sentAt": "2026-07-22T09:00:00.000Z", "resendCount": 0 },
+    { "id": "...", "email": "tom@fieldstone.co", "name": "Tom",
+      "status": "completed", "sentAt": "2026-07-09T09:00:00.000Z", "resendCount": 1 }
+  ]
+}
+```
+
+`status` is `pending`, `completed`, or `cancelled`. Poll it and your CRM can show, next to each client, whether they have been asked, whether they answered, and whether they have already used up their one nudge. That is what stops you asking the same person twice from two different systems.
+
+**Where the line sits.** Debrief does not know your roster and does not try to. Your CRM knows who your clients are, what you delivered, and where they sit in your pipeline; Debrief knows who has been asked and what came back. Deciding *who* deserves a request is your CRM's job, and `GET /api/requests` is what it needs to make that call without guessing.
+
+Hook the ask to your project-closed event, read the track endpoint wherever you look at clients, and testimonial collection stops being something you remember to do.
+
+> The public read is deliberately open. It is approved-only and strips email addresses, so do not put auth in front of it or proxy it "for security". It is already the safe surface. The two bearer endpoints are the ones that expose email, and they stay closed even in demo mode.
 
 ---
 

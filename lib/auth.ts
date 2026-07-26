@@ -37,15 +37,38 @@ const safeEqual = (a: string, b: string): boolean => {
 export const authConfigured = (): boolean => Boolean(secret());
 export const isProduction = (): boolean => process.env.NODE_ENV === 'production';
 
-/** True when the admin is reachable without a password. See the note at the top. */
-export const isOpenAdmin = (): boolean => !hasDatabase() || (!authConfigured() && !isProduction());
+/** Nothing is configured and we are on someone's laptop, so get out of the way. */
+const isLocalDev = (): boolean => !authConfigured() && !isProduction();
 
-export async function isAuthenticated(): Promise<boolean> {
-  if (isOpenAdmin()) return true;
+/** True when the admin PAGE is reachable without a password. See the note at the top. */
+export const isOpenAdmin = (): boolean => !hasDatabase() || isLocalDev();
+
+async function hasSessionCookie(): Promise<boolean> {
   if (!authConfigured()) return false;
-
   const cookie = (await cookies()).get(COOKIE)?.value;
   return Boolean(cookie && safeEqual(cookie, sign('ok')));
+}
+
+export async function isAuthenticated(): Promise<boolean> {
+  return isOpenAdmin() || hasSessionCookie();
+}
+
+/**
+ * Authorization for the admin API, which is stricter than the admin page on
+ * purpose. The demo-mode bypass opens the UI so people can look around; it must
+ * not open the API, because `GET /api/requests` returns customer email
+ * addresses and an unauthenticated deploy would be handing them to anyone who
+ * guessed the URL.
+ *
+ * So: the bearer token, or a real signed session, or a laptop with nothing
+ * configured. Demo mode alone is not enough.
+ */
+export async function isApiAuthorized(request: Request): Promise<boolean> {
+  const password = secret();
+  const header = request.headers.get('authorization') ?? '';
+  if (password && safeEqual(header, `Bearer ${password}`)) return true;
+
+  return isLocalDev() || hasSessionCookie();
 }
 
 export async function login(password: string): Promise<boolean> {

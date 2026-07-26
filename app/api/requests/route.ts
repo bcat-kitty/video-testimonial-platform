@@ -1,6 +1,6 @@
 import { randomBytes } from 'node:crypto';
 import { NextResponse } from 'next/server';
-import { isAuthenticated } from '@/lib/auth';
+import { isApiAuthorized } from '@/lib/auth';
 import { buildSubmitLink, sendRequestEmail } from '@/lib/email';
 import { createRequest, findOpenRequest, listRequests } from '@/lib/store';
 
@@ -14,20 +14,15 @@ export const runtime = 'nodejs';
  *     -H "Content-Type: application/json" \
  *     -d '{"email":"jane@acme.com","name":"Jane","customMessage":"Loved working on the rollout with you."}'
  *
- * The admin UI does the same thing through a server action. Both accept a
- * logged-in admin cookie; this route additionally accepts the bearer token so
- * automation does not need a browser session.
+ * The admin UI does the same thing through a server action. This route takes
+ * the bearer token instead, so automation does not need a browser session.
+ *
+ * Authorization is `isApiAuthorized`, not `isAuthenticated`: demo mode opens the
+ * admin page but never the API. See lib/auth.ts.
  */
-async function authorize(request: Request): Promise<boolean> {
-  if (await isAuthenticated()) return true;
-
-  const password = process.env.ADMIN_PASSWORD;
-  if (!password) return false;
-  return request.headers.get('authorization') === `Bearer ${password}`;
-}
 
 export async function POST(request: Request) {
-  if (!(await authorize(request))) {
+  if (!(await isApiAuthorized(request))) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
@@ -90,7 +85,7 @@ export async function POST(request: Request) {
 }
 
 export async function GET(request: Request) {
-  if (!(await authorize(request))) {
+  if (!(await isApiAuthorized(request))) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 

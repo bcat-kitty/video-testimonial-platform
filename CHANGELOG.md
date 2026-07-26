@@ -1,5 +1,22 @@
 # Changelog
 
+## 2026-07-26 22:05 - Document the CRM loop, and close an API hole the demo bypass opened
+
+`GET /api/requests` has existed since v1 and was never documented. It is the read side of the CRM
+integration: who you have asked, and whether each one is pending, completed, or cancelled. The
+README now covers all three endpoints as one table (ask, track, show) with the response shape, and
+says plainly where the line sits. Your CRM knows who your clients are and decides who deserves a
+request; Debrief knows who has been asked and what came back.
+
+Removing the demo password in the previous entry had a consequence I missed at the time: because
+`isAuthenticated()` returns true in demo mode, the admin API fell open with it, and `GET
+/api/requests` returns customer email addresses. Split into two checks. `isOpenAdmin()` still opens
+the admin page, and a new `isApiAuthorized()` guards the API, requiring the bearer token or a real
+session. Demo mode alone is not enough. Verified: on the live demo's exact config the page opens
+with no login and the API returns 401 without the token.
+
+Files: `lib/auth.ts`, `app/api/requests/route.ts`, `README.md`, `CLAUDE.md`, `.env.example`
+
 ## 2026-07-26 21:15 - The admin is a dashboard, and the demo no longer asks for a password
 
 The admin used to be four sections stacked on one long page. It is now one screen with three
