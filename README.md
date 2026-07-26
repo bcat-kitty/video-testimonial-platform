@@ -41,7 +41,7 @@ flowchart LR
   F --> G["Component on<br/>your own site"]
 ```
 
-Nothing between those steps needs you. The customer never makes an account, never installs anything, and never waits on the transcription, which runs after their page has already said thank you.
+Approval is the only step that asks anything of you. The customer never makes an account, never installs anything, and never waits on the transcription, which runs after their page has already said thank you.
 
 ---
 
@@ -233,7 +233,7 @@ Next.js 16 (App Router) · React 19 · TypeScript · Tailwind v4 · Drizzle + Po
 
 ## Contributing
 
-Issues and pull requests are welcome. Vouch is small on purpose, so the most useful contributions are the ones that keep it that way: bug fixes, a storage or email adapter behind the existing seam, better handling of a browser that records something strange. If you are planning something larger, open an issue first so we can agree on the shape before you write it.
+Issues and pull requests are welcome. The most useful contributions are the ones that keep the project this size: bug fixes, a storage or email adapter behind the existing seam, better handling of a browser that records something strange. If you are planning something larger, open an issue first so we can agree on the shape before you write it.
 
 [`CLAUDE.md`](CLAUDE.md) documents the invariants worth not breaking.
 
