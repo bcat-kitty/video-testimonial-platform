@@ -1,4 +1,4 @@
-import type { Testimonial } from './db/schema';
+import type { Testimonial } from './db/types';
 
 /**
  * The only shape that ever leaves the public API. Email lives in the database

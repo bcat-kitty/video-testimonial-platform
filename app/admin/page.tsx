@@ -4,7 +4,7 @@ import { emailEnabled } from '@/lib/email';
 import { aiEnabled } from '@/lib/ai';
 import { isDemoMode, listRequests, listTestimonials } from '@/lib/store';
 import { categoryLabel } from '@/vouch.config';
-import type { Testimonial } from '@/lib/db/schema';
+import type { Testimonial } from '@/lib/db/types';
 import LoginForm from './LoginForm';
 import SendRequestForm from './SendRequestForm';
 import {

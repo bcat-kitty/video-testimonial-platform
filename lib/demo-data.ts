@@ -1,4 +1,4 @@
-import type { Testimonial, TestimonialRequest } from './db/schema';
+import type { Testimonial, TestimonialRequest } from './db/types';
 
 /**
  * Seed data for demo mode, so `npm run dev` shows a working system before you

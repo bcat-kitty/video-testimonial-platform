@@ -85,7 +85,8 @@ You are in the Vouch repo, changing the engine.
 ```
 vouch.config.ts        Every brand-specific value. Change this before changing anything else.
 lib/store.ts           The data layer. Postgres when DATABASE_URL is set, in-memory otherwise.
-lib/db/schema.ts       Two tables: testimonials, testimonial_requests.
+lib/db/schema.sql      Two tables: testimonials, testimonial_requests. Applied by npm run db:setup.
+lib/db/types.ts        Hand-written TypeScript mirrors of the two tables.
 lib/email.ts           Resend. Optional, returns the link when unconfigured.
 lib/ai.ts              Whisper + GPT. Optional, returns null when unconfigured.
 lib/auth.ts            One password, one signed cookie. No user accounts.
@@ -101,7 +102,8 @@ components/vouch/      What users copy into their own site. Keep dependency-free
 - **`approved` is the only publish gate.** Nothing reaches the public API without it. If you add a
   new read path, filter on it.
 - **Email never goes public.** `lib/public-shape.ts` is a whitelist, not a blacklist. Adding a
-  column to the schema must not automatically expose it. Add fields there deliberately.
+  column to the schema must not automatically expose it. Add fields there deliberately. A new
+  column goes in three places: `schema.sql`, `types.ts`, and (only if public) `public-shape.ts`.
 - **Every external service is optional.** `DATABASE_URL`, `BLOB_READ_WRITE_TOKEN`, `RESEND_API_KEY`,
   `OPENAI_API_KEY` must each be absent without crashing the app. Demo mode is a feature, it is how
   people evaluate the project. If you add a service, follow the same pattern: a capability check,
@@ -127,6 +129,8 @@ Each one is deliberately isolated to a single file:
 - **AI**: rewrite `lib/ai.ts`. Keep `transcribeVideo` and `extractStructured` returning `null` on
   any failure.
 - **Database**: `lib/store.ts` is already the seam. Both backends implement the same functions.
+  The Postgres branch is plain SQL through postgres.js, no ORM, so a different database means
+  rewriting those queries and `scripts/db-setup.mjs`, and nothing else.
 
 ### House style
 

@@ -1,13 +1,13 @@
-import { and, desc, eq, isNull, lt } from 'drizzle-orm';
-import { getDb, hasDatabase } from './db';
-import { testimonialRequests, testimonials, type Testimonial, type TestimonialRequest } from './db/schema';
+import { getSql, hasDatabase } from './db';
+import type { Testimonial, TestimonialRequest } from './db/types';
 import { DEMO_REQUESTS, DEMO_TESTIMONIALS } from './demo-data';
 
 /**
  * One data layer, two backends.
  *
- * With DATABASE_URL set, everything goes to Postgres. Without it, Vouch runs
- * on an in-memory store seeded with demo testimonials, so you can clone the
+ * With DATABASE_URL set, everything goes to Postgres through plain SQL
+ * (postgres.js tagged templates, no ORM). Without it, Vouch runs on an
+ * in-memory store seeded with demo testimonials, so you can clone the
  * repo and see the whole system work before signing up for anything. Writes in
  * demo mode are real but disappear on restart.
  */
@@ -24,6 +24,10 @@ export type NewRequest = {
 };
 
 export const isDemoMode = (): boolean => !hasDatabase();
+
+/** postgres.js rejects undefined values, so strip them before insert/update. */
+const defined = <T extends object>(obj: T): Partial<T> =>
+  Object.fromEntries(Object.entries(obj).filter(([, v]) => v !== undefined)) as Partial<T>;
 
 // --- in-memory backend ------------------------------------------------------
 
@@ -44,7 +48,8 @@ export async function listTestimonials(opts: { approvedOnly?: boolean; category?
   if (isDemoMode()) {
     rows = [...memory.testimonials];
   } else {
-    rows = await getDb().select().from(testimonials).orderBy(desc(testimonials.createdAt));
+    const sql = getSql();
+    rows = await sql<Testimonial[]>`SELECT * FROM testimonials ORDER BY created_at DESC`;
   }
 
   if (opts.approvedOnly) rows = rows.filter((t) => t.approved);
@@ -54,7 +59,8 @@ export async function listTestimonials(opts: { approvedOnly?: boolean; category?
 
 export async function getTestimonial(id: string): Promise<Testimonial | null> {
   if (isDemoMode()) return memory.testimonials.find((t) => t.id === id) ?? null;
-  const [row] = await getDb().select().from(testimonials).where(eq(testimonials.id, id)).limit(1);
+  const sql = getSql();
+  const [row] = await sql<Testimonial[]>`SELECT * FROM testimonials WHERE id = ${id} LIMIT 1`;
   return row ?? null;
 }
 
@@ -62,7 +68,8 @@ export async function listRequests(): Promise<TestimonialRequest[]> {
   if (isDemoMode()) {
     return [...memory.requests].sort((a, b) => b.sentAt.getTime() - a.sentAt.getTime());
   }
-  return getDb().select().from(testimonialRequests).orderBy(desc(testimonialRequests.sentAt));
+  const sql = getSql();
+  return sql<TestimonialRequest[]>`SELECT * FROM testimonial_requests ORDER BY sent_at DESC`;
 }
 
 // --- writes -----------------------------------------------------------------
@@ -79,7 +86,8 @@ export async function createTestimonial(data: NewTestimonial): Promise<Testimoni
     memory.testimonials.unshift(row);
     return row;
   }
-  const [row] = await getDb().insert(testimonials).values(data).returning();
+  const sql = getSql();
+  const [row] = await sql<Testimonial[]>`INSERT INTO testimonials ${sql(defined(data))} RETURNING *`;
   return row;
 }
 
@@ -89,7 +97,10 @@ export async function updateTestimonial(id: string, patch: Partial<Testimonial>)
     if (row) Object.assign(row, patch);
     return;
   }
-  await getDb().update(testimonials).set(patch).where(eq(testimonials.id, id));
+  const values = defined(patch);
+  if (Object.keys(values).length === 0) return;
+  const sql = getSql();
+  await sql`UPDATE testimonials SET ${sql(values)} WHERE id = ${id}`;
 }
 
 export async function deleteTestimonial(id: string): Promise<void> {
@@ -97,7 +108,8 @@ export async function deleteTestimonial(id: string): Promise<void> {
     memory.testimonials = memory.testimonials.filter((t) => t.id !== id);
     return;
   }
-  await getDb().delete(testimonials).where(eq(testimonials.id, id));
+  const sql = getSql();
+  await sql`DELETE FROM testimonials WHERE id = ${id}`;
 }
 
 export async function createRequest(data: NewRequest): Promise<TestimonialRequest> {
@@ -115,7 +127,8 @@ export async function createRequest(data: NewRequest): Promise<TestimonialReques
     memory.requests.unshift(row);
     return row;
   }
-  const [row] = await getDb().insert(testimonialRequests).values(data).returning();
+  const sql = getSql();
+  const [row] = await sql<TestimonialRequest[]>`INSERT INTO testimonial_requests ${sql(defined(data))} RETURNING *`;
   return row;
 }
 
@@ -135,34 +148,20 @@ export async function findOpenRequest(opts: { token?: string | null; email?: str
     return null;
   }
 
-  const db = getDb();
+  const sql = getSql();
   if (opts.token) {
-    const [row] = await db
-      .select()
-      .from(testimonialRequests)
-      .where(
-        and(
-          eq(testimonialRequests.token, opts.token),
-          isNull(testimonialRequests.respondedAt),
-          isNull(testimonialRequests.cancelledAt),
-        ),
-      )
-      .limit(1);
+    const [row] = await sql<TestimonialRequest[]>`
+      SELECT * FROM testimonial_requests
+      WHERE token = ${opts.token} AND responded_at IS NULL AND cancelled_at IS NULL
+      LIMIT 1`;
     if (row) return row;
   }
   if (opts.email) {
-    const [row] = await db
-      .select()
-      .from(testimonialRequests)
-      .where(
-        and(
-          eq(testimonialRequests.email, opts.email),
-          isNull(testimonialRequests.respondedAt),
-          isNull(testimonialRequests.cancelledAt),
-        ),
-      )
-      .orderBy(testimonialRequests.sentAt)
-      .limit(1);
+    const [row] = await sql<TestimonialRequest[]>`
+      SELECT * FROM testimonial_requests
+      WHERE email = ${opts.email} AND responded_at IS NULL AND cancelled_at IS NULL
+      ORDER BY sent_at
+      LIMIT 1`;
     if (row) return row;
   }
   return null;
@@ -174,7 +173,10 @@ export async function updateRequest(id: string, patch: Partial<TestimonialReques
     if (row) Object.assign(row, patch);
     return;
   }
-  await getDb().update(testimonialRequests).set(patch).where(eq(testimonialRequests.id, id));
+  const values = defined(patch);
+  if (Object.keys(values).length === 0) return;
+  const sql = getSql();
+  await sql`UPDATE testimonial_requests SET ${sql(values)} WHERE id = ${id}`;
 }
 
 /** Requests sent before `before`, never answered, never cancelled, never nudged. */
@@ -184,15 +186,9 @@ export async function findRequestsNeedingNudge(before: Date): Promise<Testimonia
       (r) => !r.respondedAt && !r.cancelledAt && r.resendCount === 0 && r.sentAt < before,
     );
   }
-  return getDb()
-    .select()
-    .from(testimonialRequests)
-    .where(
-      and(
-        isNull(testimonialRequests.respondedAt),
-        isNull(testimonialRequests.cancelledAt),
-        eq(testimonialRequests.resendCount, 0),
-        lt(testimonialRequests.sentAt, before),
-      ),
-    );
+  const sql = getSql();
+  return sql<TestimonialRequest[]>`
+    SELECT * FROM testimonial_requests
+    WHERE responded_at IS NULL AND cancelled_at IS NULL
+      AND resend_count = 0 AND sent_at < ${before}`;
 }

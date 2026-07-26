@@ -9,12 +9,10 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "db:push": "drizzle-kit push",
-    "db:generate": "drizzle-kit generate"
+    "db:setup": "node scripts/db-setup.mjs"
   },
   "dependencies": {
     "@vercel/blob": "^2.3.3",
-    "drizzle-orm": "^0.45.2",
     "next": "16.1.1",
     "openai": "^6.32.0",
     "postgres": "^3.4.5",
@@ -27,7 +25,6 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "drizzle-kit": "^0.31.10",
     "tailwindcss": "^4.1.18",
     "typescript": "^5"
   }
