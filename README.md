@@ -6,6 +6,8 @@ Vouch is a self-hosted testimonial engine. You deploy one instance, it exposes a
 
 The premise is simple: almost nobody will write you three good paragraphs, but almost everybody will talk to their phone for ninety seconds. So Vouch asks for a video and does the writing itself.
 
+**Live demo:** [vouch-pi-ochre.vercel.app](https://vouch-pi-ochre.vercel.app), running in demo mode on in-memory data. The [admin](https://vouch-pi-ochre.vercel.app/admin) password is `vouch-demo`; go ahead and approve or delete things, it resets itself.
+
 <p align="center">
   <img src="docs/screenshots/home.png" alt="The Vouch home page" width="900">
 </p>
