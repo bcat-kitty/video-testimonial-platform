@@ -65,7 +65,8 @@ Do not send them away to read the README. Walk them through it here:
    but nothing persists.
 5. Everything else is optional and degrades honestly: `BLOB_READ_WRITE_TOKEN` for video,
    `OPENAI_API_KEY` for transcription, `RESEND_API_KEY` for sending request emails,
-   `ADMIN_PASSWORD` to lock the admin. The admin shows a banner for whatever is switched off.
+   `ADMIN_PASSWORD` to lock the admin, which they need as soon as they have a database.
+   The admin shows a note for whatever is switched off.
    Tell them what each one buys and let them decide; do not insist on all of them up front.
 
 Then come back and finish the install with the instance URL.
@@ -162,6 +163,13 @@ components/debrief/      What users copy into their own site. Keep dependency-fr
   makes the CRM-webhook integration safe to wire blindly. Keep it.
 - **`components/debrief/` has no imports from the rest of the repo.** It gets copied into strangers'
   codebases. The moment it imports `@/lib/anything`, copy-paste breaks.
+- **Demo mode has no login.** `isOpenAdmin()` is true whenever there is no `DATABASE_URL`, because
+  the data is in-memory sample rows that reset on restart, so a password there guards nothing and
+  makes the demo worse. The moment a database exists, `ADMIN_PASSWORD` is required in production or
+  the admin refuses to open at all. Do not "fix" the open demo admin by adding a password back.
+- **The admin is one screen with three views.** `?view=review|live|requests`, in the URL rather than
+  in client state, so it survives a server action and a refresh. If you add something to the admin,
+  it goes inside a view or behind a button; do not stack another section onto the page.
 - **The recording page never scrolls.** `app/submit/` is one question per screen, sized to fit a
   375px-wide phone and a laptop without page scroll. If you add a field, put it on its own step or
   take one away; do not grow a screen past the fold. Validation is per-step so nobody is warned

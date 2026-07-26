@@ -107,9 +107,7 @@ export default async function HomePage() {
                   </Link>
                 </div>
                 <p className="mt-4 text-xs text-zinc-400">
-                  Admin password is{' '}
-                  <code className="rounded bg-zinc-100 px-1.5 py-0.5 font-mono">debrief-demo</code>.
-                  Approve or delete anything you like, it resets itself.
+                  No sign-in, no password. Approve or delete anything you like, it resets itself.
                 </p>
               </>
             ) : (

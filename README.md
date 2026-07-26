@@ -10,7 +10,7 @@ Debrief is a self-hosted, automated testimonial system. Send a link, your custom
 
 The premise is simple: almost nobody will write you three good paragraphs, but almost everybody will talk to their phone for ninety seconds. So Debrief asks for a video and does the writing itself.
 
-**Live demo:** [debrief-demo.vercel.app](https://debrief-demo.vercel.app), running in demo mode on in-memory data. The [admin](https://debrief-demo.vercel.app/admin) password is `debrief-demo`; go ahead and approve or delete things, it resets itself.
+**Live demo:** [debrief-demo.vercel.app](https://debrief-demo.vercel.app), running in demo mode on in-memory data. The [admin](https://debrief-demo.vercel.app/admin) is open, no sign-in; go ahead and approve or delete things, it resets itself.
 
 <p align="center">
   <img src="docs/screenshots/home.png" alt="The Debrief home page" width="900">
@@ -121,7 +121,7 @@ There are only three, and `npm run dev` shows you all of them on demo data.
   <img src="docs/screenshots/submit-questions.png" alt="The recording page, showing the three questions and the record button" width="900">
 </p>
 
-**`/admin`** is the whole job in one screen: who has not replied yet, what is waiting on you, and what is currently live. Approving is one click, and so is changing your mind.
+**`/admin`** is the whole job in one screen. Three counts across the top, one view at a time: what is waiting on you, what is live, and who has not replied yet. Approving is one click, and so is changing your mind. Asking someone new is a button, not a form you scroll past every time.
 
 <p align="center">
   <img src="docs/screenshots/admin-review.png" alt="The admin page, showing pending requests and a testimonial awaiting approval" width="900">
@@ -180,7 +180,7 @@ Deploy to Vercel (or anywhere that runs Next.js), then set what you need. Every 
 | `NEXT_PUBLIC_APP_URL` | Recording links are built against `http://localhost:3000`. Set it before you email anyone. |
 | `DATABASE_URL` | Runs on in-memory demo data. Any Postgres works: Neon, Supabase, RDS, local. |
 | `BLOB_READ_WRITE_TOKEN` | Video upload is disabled and the recording page switches to text mode. |
-| `ADMIN_PASSWORD` | Admin is open in dev, locked entirely in production. |
+| `ADMIN_PASSWORD` | Admin is open in dev and in demo mode, and locked entirely in a production deploy that has a database. |
 | `RESEND_API_KEY` + `EMAIL_FROM` | Requests are still created, the admin just hands you the link to send yourself. |
 | `EMAIL_NOTIFY` | No email when a testimonial lands. You find it in the admin instead. |
 | `OPENAI_API_KEY` | Videos are stored and playable, but not transcribed or written up. |

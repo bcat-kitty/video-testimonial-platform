@@ -1,5 +1,36 @@
 # Changelog
 
+## 2026-07-26 21:15 - The admin is a dashboard, and the demo no longer asks for a password
+
+**The demo has no login.** `isOpenAdmin()` is now true whenever there is no `DATABASE_URL`. In
+demo mode the data is in-memory sample rows that reset on restart, so the password was a locked
+door in front of an empty room, and it turned "see the owner's side" into a chore that lost people
+before they got there. Nothing changes for real instances: as soon as a database exists,
+`ADMIN_PASSWORD` is required in production or the admin refuses to open at all. Verified both
+branches by running with and without `DATABASE_URL`.
+
+**The admin was rebuilt as one screen.** It used to be four stacked sections you scrolled through:
+banners, a permanently open send-request form, pending requests, the review queue, then everything
+live. Now:
+
+- **Three views, one at a time**, behind a segmented count strip (awaiting review / live / requests
+  out). The active view lives in the URL as `?view=`, so it survives a server action and a refresh
+  and the page stays a server component with no client state.
+- **Testimonial cards in a two-column grid**, compact by default: avatar, chips, a three-line clamp
+  of the quote, and the actions. Video, full text, and the transcript are behind one expander, so
+  cards stay a uniform scannable height instead of each being as tall as its longest paragraph.
+- **Asking someone is a button**, opening a native `<dialog>` (Escape, focus trapping, and the
+  backdrop come from the browser) with labelled compact fields and a copy button on the returned
+  link.
+- **The three "what is switched off" banners** collapsed into one small note block.
+
+Measured with headless Chrome at 1440x900 and 390x844: every view fits on a desktop screen with
+zero page scroll, and horizontal overflow is zero everywhere. It was 19px on mobile before, caused
+by grid items defaulting to `min-width: auto`.
+
+Files: `app/admin/{page,SendRequestForm,LoginForm}.tsx`, `lib/auth.ts`, `app/page.tsx`,
+`README.md`, `CLAUDE.md`, `docs/screenshots/admin-review.png`
+
 ## 2026-07-26 19:40 - Renamed from Vouch to Debrief
 
 The project was called Vouch for one day. It is now Debrief. Renamed before any launch,
