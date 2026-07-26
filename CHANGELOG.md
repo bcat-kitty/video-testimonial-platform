@@ -8,12 +8,19 @@ README now covers all three endpoints as one table (ask, track, show) with the r
 says plainly where the line sits. Your CRM knows who your clients are and decides who deserves a
 request; Debrief knows who has been asked and what came back.
 
-Removing the demo password in the previous entry had a consequence I missed at the time: because
+Removing the demo password in the previous entry had a consequence missed at the time: because
 `isAuthenticated()` returns true in demo mode, the admin API fell open with it, and `GET
-/api/requests` returns customer email addresses. Split into two checks. `isOpenAdmin()` still opens
-the admin page, and a new `isApiAuthorized()` guards the API, requiring the bearer token or a real
-session. Demo mode alone is not enough. Verified: on the live demo's exact config the page opens
-with no login and the API returns 401 without the token.
+/api/requests` returns customer email addresses.
+
+There are now two checks and they do not overlap. `isAuthenticated()` guards the admin page and
+keeps its bypasses for demo mode and local dev, because there is nothing behind it worth a
+password. `isApiAuthorized()` guards the admin API and has no bypasses at all: send the bearer
+token or get a 401, and with no `ADMIN_PASSWORD` set the API is simply off. The admin UI never
+calls the API (it uses server actions), so nothing needed the cookie path.
+
+Verified across both configurations: with a password set in demo mode the page opens with no login
+and the API returns 401 without the token; with no password the API is off and the page still
+opens.
 
 Files: `lib/auth.ts`, `app/api/requests/route.ts`, `README.md`, `CLAUDE.md`, `.env.example`
 

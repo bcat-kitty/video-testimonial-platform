@@ -163,12 +163,12 @@ components/debrief/      What users copy into their own site. Keep dependency-fr
   makes the CRM-webhook integration safe to wire blindly. Keep it.
 - **`components/debrief/` has no imports from the rest of the repo.** It gets copied into strangers'
   codebases. The moment it imports `@/lib/anything`, copy-paste breaks.
-- **Demo mode has no login, and the API does not care.** `isOpenAdmin()` is true whenever there is
-  no `DATABASE_URL`, because the data is in-memory sample rows that reset on restart, so a password
-  there guards nothing and makes the demo worse. Do not "fix" that by adding a password back. But
-  the bypass stops at the UI: `app/api/requests` uses `isApiAuthorized()`, which requires the bearer
-  token or a real session, because `GET` on it returns customer email addresses. Any new route that
-  exposes email uses `isApiAuthorized`, never `isAuthenticated`.
+- **Two auth checks, and they are not interchangeable.** `isAuthenticated()` guards the admin *page*
+  and has deliberate bypasses: demo mode (in-memory sample data, nothing to protect) and local dev
+  with nothing configured. Do not "fix" those by adding a password back. `isApiAuthorized()` guards
+  the admin *API* and has no bypasses at all, because `GET /api/requests` returns customer email
+  addresses. Send the bearer token or get a 401. Any new route that exposes email uses
+  `isApiAuthorized`, never `isAuthenticated`.
 - **The admin is one screen with three views.** `?view=review|live|requests`, in the URL rather than
   in client state, so it survives a server action and a refresh. If you add something to the admin,
   it goes inside a view or behind a button; do not stack another section onto the page.

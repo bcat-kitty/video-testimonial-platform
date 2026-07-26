@@ -180,7 +180,7 @@ Deploy to Vercel (or anywhere that runs Next.js), then set what you need. Every 
 | `NEXT_PUBLIC_APP_URL` | Recording links are built against `http://localhost:3000`. Set it before you email anyone. |
 | `DATABASE_URL` | Runs on in-memory demo data. Any Postgres works: Neon, Supabase, RDS, local. |
 | `BLOB_READ_WRITE_TOKEN` | Video upload is disabled and the recording page switches to text mode. |
-| `ADMIN_PASSWORD` | Admin is open in dev and in demo mode, and locked entirely in a production deploy that has a database. |
+| `ADMIN_PASSWORD` | Admin page is open in dev and in demo mode, and locked entirely in a production deploy that has a database. The admin API is switched off, since this doubles as its bearer token. |
 | `RESEND_API_KEY` + `EMAIL_FROM` | Requests are still created, the admin just hands you the link to send yourself. |
 | `EMAIL_NOTIFY` | No email when a testimonial lands. You find it in the admin instead. |
 | `OPENAI_API_KEY` | Videos are stored and playable, but not transcribed or written up. |
@@ -208,7 +208,7 @@ The admin has a form, but the way Debrief is meant to be used is from whatever s
 | **Track** | `GET /api/requests` | Bearer | Who you have asked, and where each one stands. |
 | **Show** | `GET /api/public/testimonials` | None | What came back and got approved. This is what your site reads. |
 
-Bearer auth is `Authorization: Bearer $ADMIN_PASSWORD`. The public read has no auth and never will; see the note at the end of this section.
+Bearer auth is `Authorization: Bearer $ADMIN_PASSWORD`, always, with no exceptions for dev or demo mode. If `ADMIN_PASSWORD` is unset the two bearer endpoints are switched off entirely, because there is nothing to check against.
 
 **Ask.** One call, safe to wire blindly:
 

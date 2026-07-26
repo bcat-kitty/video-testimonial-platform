@@ -17,12 +17,13 @@ export const runtime = 'nodejs';
  * The admin UI does the same thing through a server action. This route takes
  * the bearer token instead, so automation does not need a browser session.
  *
- * Authorization is `isApiAuthorized`, not `isAuthenticated`: demo mode opens the
- * admin page but never the API. See lib/auth.ts.
+ * Authorization is the bearer token, always. Not `isAuthenticated`, which has
+ * bypasses for the demo and local dev that must never reach this route: GET
+ * returns customer email addresses. See lib/auth.ts.
  */
 
 export async function POST(request: Request) {
-  if (!(await isApiAuthorized(request))) {
+  if (!isApiAuthorized(request)) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
@@ -85,7 +86,7 @@ export async function POST(request: Request) {
 }
 
 export async function GET(request: Request) {
-  if (!(await isApiAuthorized(request))) {
+  if (!isApiAuthorized(request)) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
