@@ -15,14 +15,32 @@ This is the common one. The human already has a Debrief instance deployed (or is
 wants testimonials rendering on their own site. **You are working in their site's repo, not in
 the Debrief repo.**
 
-### Interview first
+Do the whole job in one conversation. Do not hand back a checklist for the human to run later.
 
-Do not start editing. Ask these, and wait for the answers. They change what you write.
+### Look before you ask
+
+Read their repo first, so your questions are concrete and short. Find:
+
+- **The framework and router.** App Router, Pages Router, Vite, Astro, something else. This decides
+  whether the components drop in as-is (see Constraints below).
+- **Their landing page.** Usually `app/page.tsx`, `pages/index.tsx`, `src/routes/+page.svelte`, or
+  similar. Read it and note the real sections, so you can ask "after the pricing table and before
+  the FAQ?" rather than "where do you want it?"
+- **Their component conventions.** Directory, naming, whether they use `cn()`/`clsx`, a `Card`
+  primitive, CSS modules, Tailwind, dark mode.
+- **Whether an env file exists** and what it is called.
+
+Never guess a placement and never scatter the components across pages hoping one sticks.
+
+### Then interview
+
+Ask these, and wait for answers. Lead with what you found, so each one is a confirmation rather
+than an open question.
 
 1. **Where is your Debrief instance?** You need the URL, e.g. `https://testimonials.acme.com`.
-   If they have not deployed one yet, stop and help them do that first (see the README quick start).
-2. **Which pages should show testimonials, and where on each page?** Homepage above the footer?
-   A dedicated `/testimonials` page? Under the pricing table? Get specifics, not "on the site".
+   If they do not have one, see "If they have no instance yet" below and do that first.
+2. **Which pages, and where on each?** Propose the specific slots you found. Get a real answer,
+   not "on the site".
 3. **Compact or full?** `TestimonialStrip` is a row of short quotes for a landing page.
    `TestimonialWall` is full stories with video, for a dedicated page. They may want both,
    in different places.
@@ -30,6 +48,27 @@ Do not start editing. Ask these, and wait for the answers. They change what you 
    which ones belong on which page, so a support testimonial does not land on a sales page.
 
 Only after you have real answers should you write code.
+
+### If they have no instance yet
+
+Do not send them away to read the README. Walk them through it here:
+
+1. Fork or clone `https://github.com/anurieli/debrief`, then `npm install && npm run dev`. It runs
+   on in-memory demo data with zero configuration, so they can see the whole system before
+   committing to anything.
+2. Edit `debrief.config.ts`: brand name, sender name, the three questions, categories, accent.
+3. Deploy it (Vercel, or anywhere that runs Next.js). It is a separate deployment from their site,
+   usually on a subdomain like `testimonials.theirdomain.com`.
+4. **Database.** Any Postgres works: Neon, Supabase, RDS, local. Put the connection string in
+   `DATABASE_URL` and run `npm run db:setup` once. That reads `.env.local` itself and applies
+   `lib/db/schema.sql`, which is two tables and safe to re-run. Without a database it still runs,
+   but nothing persists.
+5. Everything else is optional and degrades honestly: `BLOB_READ_WRITE_TOKEN` for video,
+   `OPENAI_API_KEY` for transcription, `RESEND_API_KEY` for sending request emails,
+   `ADMIN_PASSWORD` to lock the admin. The admin shows a banner for whatever is switched off.
+   Tell them what each one buys and let them decide; do not insist on all of them up front.
+
+Then come back and finish the install with the instance URL.
 
 ### Then install
 
@@ -61,6 +100,10 @@ import TestimonialWall from '@/components/debrief/TestimonialWall';
 5. Verify it renders. If the instance has no approved testimonials yet, **the components render
    `null` by design**, so an empty page is expected, not a bug. Confirm by curling
    `<instance>/api/public/testimonials` and checking whether the array is empty.
+6. **Close the loop.** Tell them in two lines what you changed, which file the component landed in,
+   and how to send their first request (the admin form, or `POST /api/requests` from their CRM).
+   If the wall is empty because they have no testimonials yet, say so plainly so they do not go
+   hunting for a bug that is not there.
 
 ### Constraints
 

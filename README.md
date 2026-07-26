@@ -18,6 +18,40 @@ The premise is simple: almost nobody will write you three good paragraphs, but a
 
 ---
 
+## Install it in one conversation
+
+You should not have to read this README to use this. Paste the block below into Claude Code, Cursor, Codex, or whatever agent you already have open in your project, and answer its questions.
+
+```
+Set up Debrief testimonials in this project.
+
+Read https://raw.githubusercontent.com/anurieli/debrief/main/CLAUDE.md and follow
+the "Job A" instructions in it exactly, including the interview step before you
+write any code.
+
+Repo: https://github.com/anurieli/debrief
+Live demo: https://debrief-demo.vercel.app
+
+Do all of it in this one conversation: ask me where testimonials belong, copy the
+components in, restyle them to match this codebase, wire the env var, and tell me
+what to do if I don't have an instance deployed yet. Ask me whenever you're not
+sure instead of guessing.
+```
+
+Here is what that agent does, so there are no surprises:
+
+1. **Asks you where testimonials belong.** Under the pricing table, above the footer, a dedicated `/testimonials` page. It will not guess and scatter them.
+2. **Finds your landing page itself.** It reads your routing and file layout, so you do not have to explain where anything lives.
+3. **Copies in the component and restyles it.** `components/debrief/` has no imports from this repo, which is what makes pasting it into a stranger's codebase work. The agent then matches your border radius, spacing, fonts, and dark mode, so it does not look bolted on.
+4. **Wires the connection.** One env var, `NEXT_PUBLIC_DEBRIEF_URL`, pointing at your instance. If you have not deployed one yet, it walks you through that first, including the database, which is one command.
+5. **Asks when it does not know.** Which categories go on which page, compact strip or full wall, both. The interview is a required step in `CLAUDE.md`, not a suggestion.
+
+The whole thing is three files and one env var on your side. There is no package to install and no version to keep in step.
+
+Prefer to do it by hand? [Skip to the manual version](#putting-testimonials-on-your-site).
+
+---
+
 ## How it works
 
 ```mermaid
