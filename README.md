@@ -19,7 +19,7 @@ The scope below is chosen, not missing by accident. Each of these is a place whe
 **Not in v1, and on the list:**
 
 - One shared admin password rather than user accounts. Fine for one approver, not for a team with roles.
-- Vercel Blob is the only storage adapter shipped. S3 and R2 need one route rewritten (see [Swapping a provider](CLAUDE.md#swapping-a-provider)).
+- Vercel Blob is the only storage adapter shipped. S3 or R2 means rewriting the upload route and the one call site that uses it (see [Swapping a provider](CLAUDE.md#swapping-a-provider)).
 - Resend for email and OpenAI for transcription are likewise the only adapters shipped, each behind a single file.
 - The AI prompt is written in English and produces English. Other languages are untested.
 - The admin can approve, feature, and delete. It cannot edit the generated text, so a bad write-up is a delete and re-ask.
@@ -58,7 +58,7 @@ There is a text mode too, for the people who prefer typing.
 ## Quick start
 
 ```bash
-git clone https://github.com/anurieli/vouch.git
+git clone https://github.com/anurieli365/vouch.git
 cd vouch
 npm install
 npm run dev

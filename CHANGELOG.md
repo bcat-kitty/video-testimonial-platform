@@ -1,6 +1,20 @@
 # Changelog
 
-## 2026-07-26 08:30 — Initial open-source release
+## 2026-07-26 09:15 - Public launch
+
+**Commits:** `0dd6c3c` docs: rewrite README for launch, `88b81ee` docs: tighten README wording
+
+Repo published at https://github.com/anurieli/vouch (MIT, public).
+
+- README rewritten for a cold reader: an explicit "This is v1" section listing chosen scope and
+  what is not in it yet, a mermaid flow diagram of the pipeline, four concrete use cases, and the
+  zero-config quick start moved up as the proof of how small the project is.
+- Repo topics added for discoverability.
+- Corrected two claims that were wrong in the first draft: approval is a step that needs you (the
+  diagram had implied the whole flow was hands-off), and swapping storage touches two files rather
+  than one.
+
+## 2026-07-26 08:30 - Initial open-source release
 
 **Commit:** `73b064a` feat: Vouch, a self-hosted video testimonial engine
 
