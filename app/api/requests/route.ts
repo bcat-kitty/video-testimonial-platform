@@ -84,7 +84,7 @@ export async function POST(request: Request) {
       ...(result.sent ? {} : { note: result.reason }),
     });
   } catch (err) {
-    console.error('[vouch] create request failed', err);
+    console.error('[debrief] create request failed', err);
     return NextResponse.json({ error: 'Could not create request.' }, { status: 400 });
   }
 }

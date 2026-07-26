@@ -1,7 +1,7 @@
 'use client';
 
 import { useActionState } from 'react';
-import { vouchConfig } from '@/vouch.config';
+import { debriefConfig } from '@/debrief.config';
 import { sendRequestAction, type ActionState } from './actions';
 
 export default function SendRequestForm({ emailEnabled }: { emailEnabled: boolean }) {
@@ -18,14 +18,14 @@ export default function SendRequestForm({ emailEnabled }: { emailEnabled: boolea
 
       <form action={action} className="space-y-4">
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <input name="email" type="email" required placeholder="jane@acme.com" className="v-input" />
-          <input name="name" placeholder="Jane Smith" className="v-input" />
+          <input name="email" type="email" required placeholder="jane@acme.com" className="d-input" />
+          <input name="name" placeholder="Jane Smith" className="d-input" />
         </div>
 
-        {vouchConfig.categories.length > 0 && (
-          <select name="category" defaultValue="" className="v-input">
+        {debriefConfig.categories.length > 0 && (
+          <select name="category" defaultValue="" className="d-input">
             <option value="">No category</option>
-            {vouchConfig.categories.map((c) => (
+            {debriefConfig.categories.map((c) => (
               <option key={c.value} value={c.value}>
                 {c.label}
               </option>
@@ -37,10 +37,10 @@ export default function SendRequestForm({ emailEnabled }: { emailEnabled: boolea
           name="customMessage"
           rows={3}
           placeholder="A personal line at the top of the email. Optional, but it doubles the reply rate."
-          className="v-input"
+          className="d-input"
         />
 
-        <button type="submit" disabled={pending} className="v-btn">
+        <button type="submit" disabled={pending} className="d-btn">
           {pending ? 'Sending...' : 'Send request'}
         </button>
       </form>

@@ -1,4 +1,4 @@
-import { fetchTestimonials, type VouchTestimonial } from './vouch-client';
+import { fetchTestimonials, type DebriefTestimonial } from './debrief-client';
 
 /**
  * The full story version: video if there is one, the before / after / recommend
@@ -10,10 +10,10 @@ interface TestimonialWallProps {
   category?: string;
   limit?: number;
   featured?: boolean;
-  testimonials?: VouchTestimonial[];
+  testimonials?: DebriefTestimonial[];
 }
 
-function Attribution({ t }: { t: VouchTestimonial }) {
+function Attribution({ t }: { t: DebriefTestimonial }) {
   const link = t.companyUrl || t.linkedinUrl;
   const label = `${t.role}${t.company ? `, ${t.company}` : ''}`;
 

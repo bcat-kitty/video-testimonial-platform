@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { upload } from '@vercel/blob/client';
-import { vouchConfig } from '@/vouch.config';
+import { debriefConfig } from '@/debrief.config';
 import VideoCapture from './VideoCapture';
 
 const MAX_VIDEO_BYTES = 150 * 1024 * 1024;
@@ -45,7 +45,7 @@ export default function TestimonialForm({ uploadsEnabled }: { uploadsEnabled: bo
   const params = useSearchParams();
   const token = params.get('token') || '';
 
-  const { questions, categories, recordingPage } = vouchConfig;
+  const { questions, categories, recordingPage } = debriefConfig;
 
   const [mode, setMode] = useState<Mode>(uploadsEnabled ? 'video' : 'text');
   const [stepIndex, setStepIndex] = useState(0);
@@ -282,14 +282,14 @@ export default function TestimonialForm({ uploadsEnabled }: { uploadsEnabled: bo
                   />
                   {categories.length > 0 && (
                     <div>
-                      <label htmlFor="category" className="v-label-sm">
+                      <label htmlFor="category" className="d-label-sm">
                         What did we work on?
                       </label>
                       <select
                         id="category"
                         value={values.category}
                         onChange={(e) => set('category')(e.target.value)}
-                        className="v-input-sm"
+                        className="d-input-sm"
                       >
                         <option value="">Select one...</option>
                         {categories.map((c) => (
@@ -365,7 +365,7 @@ export default function TestimonialForm({ uploadsEnabled }: { uploadsEnabled: bo
                     step === 'before' ? 'situationBefore' : step === 'after' ? 'whatChanged' : 'recommendation',
                   )(e.target.value)
                 }
-                className="v-input-sm resize-none leading-relaxed"
+                className="d-input-sm resize-none leading-relaxed"
                 placeholder="Type here..."
               />
             )}
@@ -373,7 +373,7 @@ export default function TestimonialForm({ uploadsEnabled }: { uploadsEnabled: bo
             {step === 'finish' && (
               <div className="space-y-4">
                 <div>
-                  <label htmlFor="headshot" className="v-label-sm">
+                  <label htmlFor="headshot" className="d-label-sm">
                     Photo (optional)
                   </label>
                   <input
@@ -416,11 +416,11 @@ export default function TestimonialForm({ uploadsEnabled }: { uploadsEnabled: bo
               type="button"
               onClick={back}
               disabled={stepIndex === 0 || isBusy}
-              className="v-btn-secondary px-4 py-2 text-sm disabled:invisible"
+              className="d-btn-secondary px-4 py-2 text-sm disabled:invisible"
             >
               Back
             </button>
-            <button type="button" onClick={next} disabled={isBusy} className="v-btn px-8 py-2.5">
+            <button type="button" onClick={next} disabled={isBusy} className="d-btn px-8 py-2.5">
               {state === 'uploading'
                 ? 'Uploading...'
                 : state === 'submitting'
@@ -464,7 +464,7 @@ function Field({
   const id = label.toLowerCase().replace(/[^a-z]/g, '');
   return (
     <div>
-      <label htmlFor={id} className="v-label-sm">
+      <label htmlFor={id} className="d-label-sm">
         {label}
       </label>
       <input
@@ -474,7 +474,7 @@ function Field({
         autoFocus={autoFocus}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="v-input-sm"
+        className="d-input-sm"
         {...(url
           ? { inputMode: 'url' as const, autoCapitalize: 'none', autoCorrect: 'off', spellCheck: false }
           : {})}

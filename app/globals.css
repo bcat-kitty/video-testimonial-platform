@@ -1,18 +1,18 @@
 @import 'tailwindcss';
 
 /**
- * Vouch ships one accent color and neutral greys. Override --vouch-accent
+ * Debrief ships one accent color and neutral greys. Override --debrief-accent
  * (here, or on :root in your own stylesheet) and everything follows: buttons,
  * links, focus rings, the recording indicator.
  */
 :root {
-  --vouch-accent: #4f46e5;
-  --vouch-accent-contrast: #ffffff;
+  --debrief-accent: #4f46e5;
+  --debrief-accent-contrast: #ffffff;
 }
 
 @theme inline {
-  --color-accent: var(--vouch-accent);
-  --color-accent-contrast: var(--vouch-accent-contrast);
+  --color-accent: var(--debrief-accent);
+  --color-accent-contrast: var(--debrief-accent-contrast);
 }
 
 body {
@@ -22,37 +22,37 @@ body {
 }
 
 /* Inputs share one look so the recording form stays visually quiet. */
-.v-input {
+.d-input {
   @apply w-full rounded-lg border border-zinc-300 bg-white px-4 py-3 text-base text-zinc-900 placeholder:text-zinc-400;
   @apply focus:border-accent focus:ring-2 focus:ring-accent/25 focus:outline-none;
 }
 
-.v-label {
+.d-label {
   @apply mb-2 block text-sm font-semibold text-zinc-900;
 }
 
 /* Compact variants, used by the stepped recording form so each screen fits
    without scrolling. 16px text on inputs is deliberate: anything smaller and
    iOS Safari zooms the page on focus. */
-.v-input-sm {
+.d-input-sm {
   @apply w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-base text-zinc-900 placeholder:text-zinc-400;
   @apply focus:border-accent focus:ring-2 focus:ring-accent/25 focus:outline-none;
 }
 
-.v-label-sm {
+.d-label-sm {
   @apply mb-1 block text-xs font-semibold text-zinc-700;
 }
 
-.v-hint {
+.d-hint {
   @apply mb-2 text-xs text-zinc-500;
 }
 
-.v-btn {
+.d-btn {
   @apply inline-flex items-center justify-center gap-2 rounded-lg px-6 py-3 text-sm font-semibold transition-opacity;
   @apply bg-accent text-accent-contrast hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50;
 }
 
-.v-btn-secondary {
+.d-btn-secondary {
   @apply inline-flex items-center justify-center gap-2 rounded-lg border border-zinc-300 bg-white px-5 py-3 text-sm font-semibold text-zinc-700 transition-colors;
   @apply hover:border-zinc-400 hover:text-zinc-900 disabled:cursor-not-allowed disabled:opacity-50;
 }

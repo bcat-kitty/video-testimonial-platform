@@ -8,7 +8,7 @@ export default function LoginForm() {
 
   return (
     <main className="mx-auto flex min-h-screen max-w-sm flex-col justify-center px-4">
-      <h1 className="mb-2 text-2xl font-bold tracking-tight text-zinc-900">Vouch admin</h1>
+      <h1 className="mb-2 text-2xl font-bold tracking-tight text-zinc-900">Debrief admin</h1>
       <p className="mb-8 text-sm text-zinc-500">Enter the admin password for this instance.</p>
 
       <form action={action} className="space-y-4">
@@ -18,10 +18,10 @@ export default function LoginForm() {
           required
           autoFocus
           placeholder="Password"
-          className="v-input"
+          className="d-input"
         />
         {state?.error && <p className="text-sm font-medium text-red-600">{state.error}</p>}
-        <button type="submit" disabled={pending} className="v-btn w-full">
+        <button type="submit" disabled={pending} className="d-btn w-full">
           {pending ? 'Checking...' : 'Sign in'}
         </button>
       </form>

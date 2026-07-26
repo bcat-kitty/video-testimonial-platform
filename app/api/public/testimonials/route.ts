@@ -29,7 +29,7 @@ export async function GET(request: Request) {
       { headers: { 'Access-Control-Allow-Origin': '*', 'Cache-Control': 'public, max-age=60' } },
     );
   } catch (err) {
-    console.error('[vouch] public list failed', err);
+    console.error('[debrief] public list failed', err);
     return NextResponse.json({ testimonials: [] }, { status: 500 });
   }
 }

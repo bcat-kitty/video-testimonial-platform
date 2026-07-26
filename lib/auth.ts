@@ -3,7 +3,7 @@ import { cookies } from 'next/headers';
 
 /**
  * Deliberately minimal admin auth: one shared password, one signed cookie.
- * There are no user accounts in Vouch, because one person approves
+ * There are no user accounts in Debrief, because one person approves
  * testimonials. If you need real accounts, put this behind your own auth
  * instead and delete this file.
  *
@@ -12,7 +12,7 @@ import { cookies } from 'next/headers';
  * fails safe.
  */
 
-const COOKIE = 'vouch_admin';
+const COOKIE = 'debrief_admin';
 
 const secret = () => process.env.ADMIN_PASSWORD || '';
 

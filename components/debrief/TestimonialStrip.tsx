@@ -1,4 +1,4 @@
-import { fetchTestimonials, type VouchTestimonial } from './vouch-client';
+import { fetchTestimonials, type DebriefTestimonial } from './debrief-client';
 
 /**
  * A compact row of quotes. Drop it on a homepage or under a pricing table.
@@ -14,7 +14,7 @@ interface TestimonialStripProps {
   featured?: boolean;
   heading?: string;
   /** Pass testimonials directly to skip the fetch (useful if you already have them). */
-  testimonials?: VouchTestimonial[];
+  testimonials?: DebriefTestimonial[];
 }
 
 export default async function TestimonialStrip({

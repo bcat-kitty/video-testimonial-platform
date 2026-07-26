@@ -1,5 +1,5 @@
 import OpenAI from 'openai';
-import { vouchConfig } from '@/vouch.config';
+import { debriefConfig } from '@/debrief.config';
 
 /**
  * The part that makes video testimonials usable: transcribe what they said,
@@ -18,7 +18,7 @@ export async function transcribeVideo(videoUrl: string): Promise<string | null> 
   try {
     const res = await fetch(videoUrl);
     if (!res.ok) {
-      console.error('[vouch] could not fetch video for transcription', res.status);
+      console.error('[debrief] could not fetch video for transcription', res.status);
       return null;
     }
     const blob = await res.blob();
@@ -28,7 +28,7 @@ export async function transcribeVideo(videoUrl: string): Promise<string | null> 
     const transcription = await client().audio.transcriptions.create({ model: 'whisper-1', file });
     return transcription.text || null;
   } catch (err) {
-    console.error('[vouch] transcription failed', err);
+    console.error('[debrief] transcription failed', err);
     return null;
   }
 }
@@ -40,7 +40,7 @@ export interface StructuredTestimonial {
 }
 
 function systemPrompt(): string {
-  const { brandName, questions } = vouchConfig;
+  const { brandName, questions } = debriefConfig;
   return `You convert a short customer video-testimonial transcript into three brief paragraphs that read like the customer's own words.
 
 Context: the speaker is a customer of ${brandName}. Speech-to-text sometimes mishears company and personal names. If a word is clearly a garbled version of "${brandName}", write it correctly. Do this silently.
@@ -90,7 +90,7 @@ export async function extractStructured(transcript: string): Promise<StructuredT
       recommendation: clean(parsed.recommendation),
     };
   } catch (err) {
-    console.error('[vouch] extraction failed', err);
+    console.error('[debrief] extraction failed', err);
     return null;
   }
 }

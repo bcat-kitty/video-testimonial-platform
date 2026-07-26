@@ -1,15 +1,15 @@
 import { Resend } from 'resend';
-import { vouchConfig } from '@/vouch.config';
+import { debriefConfig } from '@/debrief.config';
 
 /**
- * Email is optional. Without RESEND_API_KEY, Vouch still creates the request
+ * Email is optional. Without RESEND_API_KEY, Debrief still creates the request
  * and its link, it just reports back that nothing was sent so the admin can
  * copy the link and send it however they like.
  */
 
 export const emailEnabled = (): boolean => Boolean(process.env.RESEND_API_KEY && process.env.EMAIL_FROM);
 
-const from = () => process.env.EMAIL_FROM || `${vouchConfig.brandName} <onboarding@resend.dev>`;
+const from = () => process.env.EMAIL_FROM || `${debriefConfig.brandName} <onboarding@resend.dev>`;
 
 export function appUrl(): string {
   return (process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000').replace(/\/$/, '');
@@ -68,7 +68,7 @@ export async function sendRequestEmail(opts: {
     return { sent: false, link, reason: 'RESEND_API_KEY or EMAIL_FROM not set' };
   }
 
-  const { brandName, senderName, questions } = vouchConfig;
+  const { brandName, senderName, questions } = debriefConfig;
   const firstName = displayName(opts.name, opts.to).split(' ')[0];
   const isNudge = opts.variant === 'nudge';
 
@@ -80,7 +80,7 @@ export async function sendRequestEmail(opts: {
     : `I would love for you to record a short testimonial about working with ${brandName}. It would mean a lot.`;
 
   const customBlock = opts.customMessage
-    ? `<tr><td style="padding:0 0 24px 20px;color:#3f3f46;font-size:15px;line-height:1.7;border-left:3px solid ${vouchConfig.accent};">${escapeHtml(
+    ? `<tr><td style="padding:0 0 24px 20px;color:#3f3f46;font-size:15px;line-height:1.7;border-left:3px solid ${debriefConfig.accent};">${escapeHtml(
         opts.customMessage,
       ).replace(/\n/g, '<br/>')}</td></tr>`
     : '';
@@ -91,7 +91,7 @@ export async function sendRequestEmail(opts: {
 <table width="100%" cellpadding="0" cellspacing="0" style="background:#f4f4f5;">
 <tr><td align="center" style="padding:40px 20px;">
 <table width="560" cellpadding="0" cellspacing="0" style="max-width:560px;width:100%;background:#ffffff;border-radius:12px;padding:40px;">
-  <tr><td style="padding-bottom:28px;font-size:13px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:${vouchConfig.accent};">${escapeHtml(brandName)}</td></tr>
+  <tr><td style="padding-bottom:28px;font-size:13px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:${debriefConfig.accent};">${escapeHtml(brandName)}</td></tr>
   <tr><td style="color:#18181b;font-size:22px;font-weight:700;line-height:1.3;padding-bottom:20px;">Hi ${escapeHtml(firstName)},</td></tr>
   ${customBlock}
   <tr><td style="color:#3f3f46;font-size:16px;line-height:1.7;padding-bottom:20px;">${escapeHtml(lead)}</td></tr>
@@ -104,7 +104,7 @@ export async function sendRequestEmail(opts: {
     </ol>
   </td></tr>
   <tr><td style="padding-bottom:28px;">
-    <a href="${link}" style="display:inline-block;background:${vouchConfig.accent};color:#ffffff;text-decoration:none;padding:14px 28px;border-radius:8px;font-weight:600;font-size:15px;">Record your testimonial</a>
+    <a href="${link}" style="display:inline-block;background:${debriefConfig.accent};color:#ffffff;text-decoration:none;padding:14px 28px;border-radius:8px;font-weight:600;font-size:15px;">Record your testimonial</a>
   </td></tr>
   <tr><td style="color:#71717a;font-size:14px;line-height:1.7;">You can record straight from your phone or laptop, no app needed. Prefer to type it? There is a text option on the same page.<br/><br/>Thank you,<br/>${escapeHtml(senderName)}</td></tr>
 </table>
@@ -120,7 +120,7 @@ export async function sendRequestEmail(opts: {
     });
     return { sent: true, link };
   } catch (err) {
-    console.error('[vouch] request email failed', err);
+    console.error('[debrief] request email failed', err);
     return { sent: false, link, reason: err instanceof Error ? err.message : 'send failed' };
   }
 }
@@ -142,6 +142,6 @@ export async function sendNewSubmissionNotification(data: { name: string; role: 
       </div>`,
     });
   } catch (err) {
-    console.error('[vouch] notification email failed', err);
+    console.error('[debrief] notification email failed', err);
   }
 }

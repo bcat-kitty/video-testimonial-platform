@@ -1,19 +1,19 @@
-# Vouch
+# Debrief
 
 **Testimonials that fill themselves.**
 
-[![Stars](https://img.shields.io/github/stars/anurieli/vouch?style=flat&color=4F46E5)](https://github.com/anurieli/vouch/stargazers)
-[![Forks](https://img.shields.io/github/forks/anurieli/vouch?style=flat&color=4F46E5)](https://github.com/anurieli/vouch/forks)
+[![Stars](https://img.shields.io/github/stars/anurieli/debrief?style=flat&color=4F46E5)](https://github.com/anurieli/debrief/stargazers)
+[![Forks](https://img.shields.io/github/forks/anurieli/debrief?style=flat&color=4F46E5)](https://github.com/anurieli/debrief/forks)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
-Vouch is a self-hosted, automated testimonial system. Send a link, your customer records a video, AI writes the testimonial, you approve it, it renders on your site. You deploy one instance, it exposes a public read-only API, and you copy a component into your own codebase that reads from it. Your content, your database, your domain.
+Debrief is a self-hosted, automated testimonial system. Send a link, your customer records a video, AI writes the testimonial, you approve it, it renders on your site. You deploy one instance, it exposes a public read-only API, and you copy a component into your own codebase that reads from it. Your content, your database, your domain.
 
-The premise is simple: almost nobody will write you three good paragraphs, but almost everybody will talk to their phone for ninety seconds. So Vouch asks for a video and does the writing itself.
+The premise is simple: almost nobody will write you three good paragraphs, but almost everybody will talk to their phone for ninety seconds. So Debrief asks for a video and does the writing itself.
 
-**Live demo:** [vouch-pi-ochre.vercel.app](https://vouch-pi-ochre.vercel.app), running in demo mode on in-memory data. The [admin](https://vouch-pi-ochre.vercel.app/admin) password is `vouch-demo`; go ahead and approve or delete things, it resets itself.
+**Live demo:** [debrief-demo.vercel.app](https://debrief-demo.vercel.app), running in demo mode on in-memory data. The [admin](https://debrief-demo.vercel.app/admin) password is `debrief-demo`; go ahead and approve or delete things, it resets itself.
 
 <p align="center">
-  <img src="docs/screenshots/home.png" alt="The Vouch home page" width="900">
+  <img src="docs/screenshots/home.png" alt="The Debrief home page" width="900">
 </p>
 
 ---
@@ -37,25 +37,25 @@ The write-up is three short paragraphs in the customer's own words: the situatio
 Two details worth knowing:
 
 - Submissions that match a request you sent get a **verified** flag, so you can tell a real customer from a stranger who found the form.
-- Unanswered requests get one automatic nudge after seven days, then Vouch leaves them alone. The counter only advances when the email actually sends, so a mail outage cannot silently burn everyone's single follow-up.
+- Unanswered requests get one automatic nudge after seven days, then Debrief leaves them alone. The counter only advances when the email actually sends, so a mail outage cannot silently burn everyone's single follow-up.
 
 ---
 
 ## Quick start
 
 ```bash
-git clone https://github.com/anurieli/vouch.git
-cd vouch
+git clone https://github.com/anurieli/debrief.git
+cd debrief
 npm install
 npm run dev
 ```
 
 Open `http://localhost:3000`. **It works immediately with no configuration.** No database, no API keys, no accounts. It runs on in-memory demo data, so you can send a request, open the recording page, approve a testimonial, and watch the component update, all before deciding whether you want any of it. Nothing persists until you add a database.
 
-Then make it yours by editing one file, `vouch.config.ts`:
+Then make it yours by editing one file, `debrief.config.ts`:
 
 ```ts
-export const vouchConfig: VouchConfig = {
+export const debriefConfig: DebriefConfig = {
   brandName: 'Acme',
   senderName: 'Alex',
   categories: [{ value: 'consulting', label: 'Consulting' }],
@@ -103,29 +103,29 @@ There are only three, and `npm run dev` shows you all of them on demo data.
 
 ## Putting testimonials on your site
 
-Copy `components/vouch/` into your own project, point it at your instance, and render it.
+Copy `components/debrief/` into your own project, point it at your instance, and render it.
 
 ```bash
-NEXT_PUBLIC_VOUCH_URL=https://testimonials.yourdomain.com
+NEXT_PUBLIC_DEBRIEF_URL=https://testimonials.yourdomain.com
 ```
 
 ```tsx
-import TestimonialStrip from '@/components/vouch/TestimonialStrip';
+import TestimonialStrip from '@/components/debrief/TestimonialStrip';
 
 <TestimonialStrip limit={3} heading="What people say" />
 ```
 
 ```tsx
-import TestimonialWall from '@/components/vouch/TestimonialWall';
+import TestimonialWall from '@/components/debrief/TestimonialWall';
 
 <TestimonialWall />  // full stories with video, for a /testimonials page
 ```
 
 That is the whole integration. Three files, one env var, no package to install and no version to keep in step.
 
-The components are async server components for the Next.js App Router, with zero imports from the rest of this repo, which is why pasting them into a stranger's codebase works. They are plain Tailwind, so restyle them, rename them, tear them apart. They render `null` when there are no approved testimonials, so you can place them before you have collected any. For a client component tree or a non-Next app, call `fetchTestimonials()` from `vouch-client.ts` yourself and pass the result in via the `testimonials` prop.
+The components are async server components for the Next.js App Router, with zero imports from the rest of this repo, which is why pasting them into a stranger's codebase works. They are plain Tailwind, so restyle them, rename them, tear them apart. They render `null` when there are no approved testimonials, so you can place them before you have collected any. For a client component tree or a non-Next app, call `fetchTestimonials()` from `debrief-client.ts` yourself and pass the result in via the `testimonials` prop.
 
-**Working with an AI assistant?** This repo ships a [`CLAUDE.md`](CLAUDE.md) written for coding agents. Point Claude Code (or any agent) at it and say *"install Vouch components into this site"*. It will read the contract, interview you about where the testimonials belong, and restyle them to match the site it is working in.
+**Working with an AI assistant?** This repo ships a [`CLAUDE.md`](CLAUDE.md) written for coding agents. Point Claude Code (or any agent) at it and say *"install Debrief components into this site"*. It will read the contract, interview you about where the testimonials belong, and restyle them to match the site it is working in.
 
 If you would rather not copy components, read the API directly:
 
@@ -166,7 +166,7 @@ The seven-day nudge runs off a daily cron. `vercel.json` already declares it, so
 
 ## The switch: one API call from your CRM
 
-The admin has a form, but the way Vouch is meant to be used is one HTTP call, fired by whatever system knows a project just closed:
+The admin has a form, but the way Debrief is meant to be used is one HTTP call, fired by whatever system knows a project just closed:
 
 ```bash
 curl -X POST https://your-instance/api/requests \
@@ -187,7 +187,7 @@ Hook it to the project-closed event in your CRM and testimonial collection stops
 
 ## This is v1, and small on purpose
 
-Vouch collects video testimonials, turns them into text, gates them behind your approval, and serves them to your site. That loop works end to end today, including the parts that usually break: recording on a phone, uploading a 100MB file, and rendering on a site that knows nothing about this repo.
+Debrief collects video testimonials, turns them into text, gates them behind your approval, and serves them to your site. That loop works end to end today, including the parts that usually break: recording on a phone, uploading a 100MB file, and rendering on a site that knows nothing about this repo.
 
 No plan tiers, no widget builder, no dashboard of vanity metrics, and no hosted wall on someone else's domain. Every external dependency is isolated to one file so you can replace it: email in `lib/email.ts`, AI in `lib/ai.ts`, the database behind `lib/store.ts`, storage in `app/api/upload/route.ts`. The whole thing is short enough to read in an afternoon and change in an hour.
 

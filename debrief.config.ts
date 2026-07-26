@@ -1,10 +1,10 @@
 /**
- * Everything about Vouch that is specific to YOU lives in this one file.
+ * Everything about Debrief that is specific to YOU lives in this one file.
  * Change it and the whole system, emails, recording page, admin, and the
  * components you drop into your site, follows.
  */
 
-export interface VouchConfig {
+export interface DebriefConfig {
   /** Your company or personal brand name. Appears in emails and on the recording page. */
   brandName: string;
   /** Who the request emails come from, in the customer's eyes. Usually a person, not a company. */
@@ -19,11 +19,11 @@ export interface VouchConfig {
   questions: { before: string; after: string; recommend: string };
   /** Copy on the public recording page. */
   recordingPage: { eyebrow: string; title: string; intro: string };
-  /** Accent color. Also settable at runtime via the --vouch-accent CSS variable. */
+  /** Accent color. Also settable at runtime via the --debrief-accent CSS variable. */
   accent: string;
 }
 
-export const vouchConfig: VouchConfig = {
+export const debriefConfig: DebriefConfig = {
   brandName: 'Acme',
   senderName: 'Alex',
 
@@ -50,7 +50,7 @@ export const vouchConfig: VouchConfig = {
 };
 
 export const categoryLabel = (value: string | null | undefined): string =>
-  vouchConfig.categories.find((c) => c.value === value)?.label || value || '';
+  debriefConfig.categories.find((c) => c.value === value)?.label || value || '';
 
 export const isValidCategory = (value: string): boolean =>
-  vouchConfig.categories.length === 0 || vouchConfig.categories.some((c) => c.value === value);
+  debriefConfig.categories.length === 0 || debriefConfig.categories.some((c) => c.value === value);

@@ -6,7 +6,7 @@ import { DEMO_REQUESTS, DEMO_TESTIMONIALS } from './demo-data';
  * One data layer, two backends.
  *
  * With DATABASE_URL set, everything goes to Postgres through plain SQL
- * (postgres.js tagged templates, no ORM). Without it, Vouch runs on an
+ * (postgres.js tagged templates, no ORM). Without it, Debrief runs on an
  * in-memory store seeded with demo testimonials, so you can clone the
  * repo and see the whole system work before signing up for anything. Writes in
  * demo mode are real but disappear on restart.
@@ -33,7 +33,7 @@ const defined = <T extends object>(obj: T): Partial<T> =>
 
 type Memory = { testimonials: Testimonial[]; requests: TestimonialRequest[] };
 
-const memory: Memory = ((globalThis as { __vouch?: Memory }).__vouch ??= {
+const memory: Memory = ((globalThis as { __debrief?: Memory }).__debrief ??= {
   testimonials: [...DEMO_TESTIMONIALS],
   requests: [...DEMO_REQUESTS],
 });

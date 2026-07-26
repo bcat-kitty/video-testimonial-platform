@@ -1,12 +1,12 @@
 import Link from 'next/link';
 import { listTestimonials } from '@/lib/store';
 import { toPublic } from '@/lib/public-shape';
-import { vouchConfig } from '@/vouch.config';
-import TestimonialStrip from '@/components/vouch/TestimonialStrip';
+import { debriefConfig } from '@/debrief.config';
+import TestimonialStrip from '@/components/debrief/TestimonialStrip';
 
 export const dynamic = 'force-dynamic';
 
-const REPO = 'anurieli/vouch';
+const REPO = 'anurieli/debrief';
 
 /**
  * Live star and fork counts for the project. Cached for an hour, and the page
@@ -43,7 +43,7 @@ export default async function HomePage() {
     <div className="min-h-screen">
       <header className="border-b border-zinc-200">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-5">
-          <span className="text-sm font-bold tracking-widest text-accent uppercase">Vouch</span>
+          <span className="text-sm font-bold tracking-widest text-accent uppercase">Debrief</span>
           <nav className="flex items-center gap-6 text-sm font-medium text-zinc-600">
             <Link href="/submit" className="hover:text-zinc-900">
               Recording page
@@ -81,15 +81,15 @@ export default async function HomePage() {
             Testimonials that fill themselves.
           </h1>
           <p className="mx-auto mb-10 max-w-2xl text-lg leading-relaxed text-zinc-600">
-            Vouch emails your customer a personal recording link, captures their video in the browser,
+            Debrief emails your customer a personal recording link, captures their video in the browser,
             transcribes it, writes it up in their own words, and waits for your approval before any of
             it becomes public.
           </p>
           <div className="flex flex-wrap justify-center gap-3">
-            <Link href="/admin" className="v-btn">
+            <Link href="/admin" className="d-btn">
               Open the admin
             </Link>
-            <Link href="/submit" className="v-btn-secondary">
+            <Link href="/submit" className="d-btn-secondary">
               See the recording page
             </Link>
           </div>
@@ -133,7 +133,7 @@ export default async function HomePage() {
             <TestimonialStrip testimonials={items} heading="What people say" />
             <div className="mx-auto max-w-2xl px-4 pb-16 text-center">
               <pre className="overflow-x-auto rounded-xl border border-zinc-200 bg-white p-4 text-left font-mono text-xs text-zinc-700">
-                {`import TestimonialStrip from '@/components/vouch/TestimonialStrip'\n\n<TestimonialStrip limit={3} heading="What people say" />`}
+                {`import TestimonialStrip from '@/components/debrief/TestimonialStrip'\n\n<TestimonialStrip limit={3} heading="What people say" />`}
               </pre>
             </div>
           </section>
@@ -143,8 +143,8 @@ export default async function HomePage() {
       <footer className="border-t border-zinc-200">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-8 text-sm text-zinc-500">
           <span>
-            Vouch, configured for {vouchConfig.brandName}. Edit{' '}
-            <code className="rounded bg-zinc-100 px-1.5 py-0.5 font-mono text-xs">vouch.config.ts</code> to
+            Debrief, configured for {debriefConfig.brandName}. Edit{' '}
+            <code className="rounded bg-zinc-100 px-1.5 py-0.5 font-mono text-xs">debrief.config.ts</code> to
             make it yours.
           </span>
           <a

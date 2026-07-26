@@ -1,4 +1,4 @@
--- Vouch schema. Two tables. Apply once with: npm run db:setup
+-- Debrief schema. Two tables. Apply once with: npm run db:setup
 -- Requires Postgres 13+ (for gen_random_uuid). Neon, Supabase, RDS, and local
 -- all qualify. Running this again is safe: everything is IF NOT EXISTS.
 

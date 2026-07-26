@@ -1,12 +1,41 @@
 # Changelog
 
+## 2026-07-26 19:40 - Renamed from Vouch to Debrief
+
+The project was called Vouch for one day. It is now Debrief. Renamed before any launch,
+so nothing published points at the old name.
+
+**Why:** vouchfor.com is an established video testimonial company whose public pitch is
+identical to this project's (single link, AI-generated questions, CRM integration, embed
+anywhere), with Canva, Nike, Cisco, HubSpot and Amazon as customers. Same name in the same
+category is the textbook shape of trademark confusion, and it made the project impossible
+to find. Alternatives were checked and rejected: "openvoucher" reads as a coupon engine
+(voucherify.io owns that space) and still carries the competitor's mark; "sayso" collides
+with sayso.video, another video testimonial company; "one take" collides with several video
+recording apps including onetake.ai.
+
+Debrief names the method rather than the output. Every competitor in the category is named
+after the result (Vouch, Boast, Endorsal, Famewall, Testimonial.to); none is named after how
+the thing is actually collected. It also survives the planned audio-only mode, since
+"debrief your customers" holds whether they talk, record, or type.
+
+**Changed:** `vouch.config.ts` → `debrief.config.ts` (`vouchConfig` → `debriefConfig`),
+`components/vouch/` → `components/debrief/`, `vouch-client.ts` → `debrief-client.ts`,
+`--vouch-accent` → `--debrief-accent`, `NEXT_PUBLIC_VOUCH_URL` → `NEXT_PUBLIC_DEBRIEF_URL`,
+the `.v-*` utility classes → `.d-*`, the admin cookie, and every doc reference. All four
+screenshots regenerated.
+
+GitHub redirects github.com/anurieli/vouch to the new URL, so any link already shared keeps
+working. The live demo moved to https://debrief-demo.vercel.app (admin password
+`debrief-demo`), replacing the old randomly-generated Vercel alias.
+
 ## 2026-07-26 18:25 - Video enabled on the demo, one question per screen
 
 **Commits:** `4da7b67` feat: idempotent requests, new tagline, `fa42adb` feat: GitHub stars,
 `7fc45cd` feat: one question per screen on the recording page
 
 - **Video works on the live demo.** It had been silently falling back to text mode because no
-  Vercel Blob store existed. Created `vouch-demo` (public, iad1) and connected it to the project,
+  Vercel Blob store existed. Created `debrief-demo` (public, iad1) and connected it to the project,
   which set `BLOB_READ_WRITE_TOKEN` across all environments. Confirmed live: the recording page
   now opens in video mode at step 1/4.
 - **Recording page rebuilt as a stepped card.** The old single long form showed the customer
@@ -43,8 +72,8 @@ Files: `app/submit/{TestimonialForm,VideoCapture}.tsx`, `app/globals.css`, `app/
 - **README trimmed 245 → 213 lines:** cut the persona section, the pipeline table that repeated
   the diagram, and the standalone premise essay; merged the two scope sections; fixed the clone
   URL which had regressed to the wrong handle.
-- **Live demo hosted:** https://vouch-pi-ochre.vercel.app under the personal Vercel scope (no
-  company trace in the URL), demo mode, admin password `vouch-demo` published in the README.
+- **Live demo hosted:** https://debrief-demo.vercel.app under the personal Vercel scope (no
+  company trace in the URL), demo mode, admin password `debrief-demo` published in the README.
   GitHub repo connected for auto-deploy on push. `ADMIN_PASSWORD` and `NEXT_PUBLIC_APP_URL` set
   in production.
 
@@ -55,7 +84,7 @@ Files: `lib/store.ts`, `lib/db/{schema.sql,types.ts,index.ts}`, `scripts/db-setu
 
 **Commits:** `0dd6c3c` docs: rewrite README for launch, `88b81ee` docs: tighten README wording
 
-Repo published at https://github.com/anurieli/vouch (MIT, public).
+Repo published at https://github.com/anurieli/debrief (MIT, public).
 
 - README rewritten for a cold reader: an explicit "This is v1" section listing chosen scope and
   what is not in it yet, a mermaid flow diagram of the pipeline, four concrete use cases, and the
@@ -67,9 +96,9 @@ Repo published at https://github.com/anurieli/vouch (MIT, public).
 
 ## 2026-07-26 08:30 - Initial open-source release
 
-**Commit:** `73b064a` feat: Vouch, a self-hosted video testimonial engine
+**Commit:** `73b064a` feat: Debrief, a self-hosted video testimonial engine
 
-First public version. Vouch was extracted from a private company codebase, where the
+First public version. Debrief was extracted from a private company codebase, where the
 request-send, video-record, transcribe, approve, and display pipeline was wired directly into a
 CRM (contacts table, stage machine, portal auth, agent API, hardcoded brand). This release
 generalises all of that into a standalone app anyone can deploy.
@@ -84,12 +113,12 @@ What landed:
 - **Every service optional.** Missing `OPENAI_API_KEY` stores video without text, missing
   `RESEND_API_KEY` returns the recording link for you to send yourself, missing
   `BLOB_READ_WRITE_TOKEN` disables video and keeps text mode. The admin shows a banner for each.
-- **One config file.** `vouch.config.ts` holds brand name, sender, categories, the three
+- **One config file.** `debrief.config.ts` holds brand name, sender, categories, the three
   questions, recording-page copy, and accent color. It drives the emails, the form, the admin,
   and the AI prompt.
 - **Public API boundary.** `lib/public-shape.ts` is an explicit whitelist, so adding a schema
   column can never accidentally publish it. Email is never exposed.
-- **Copy-in components.** `components/vouch/` has no imports from the rest of the repo, so it
+- **Copy-in components.** `components/debrief/` has no imports from the rest of the repo, so it
   survives being pasted into someone else's project. `TestimonialStrip` and `TestimonialWall`,
   plus a fetch client that returns `[]` rather than throwing.
 - **Agent-first install docs.** `CLAUDE.md` tells a coding agent to interview the developer about
@@ -99,6 +128,6 @@ What landed:
 Verified: `tsc --noEmit` clean, `next build` clean, all seven routes render, public API returns
 approved-only rows.
 
-Files: `vouch.config.ts`, `lib/{store,email,ai,auth,public-shape,demo-data}.ts`, `lib/db/*`,
-`app/{page,layout}.tsx`, `app/submit/*`, `app/admin/*`, `app/api/*`, `components/vouch/*`,
+Files: `debrief.config.ts`, `lib/{store,email,ai,auth,public-shape,demo-data}.ts`, `lib/db/*`,
+`app/{page,layout}.tsx`, `app/submit/*`, `app/admin/*`, `app/api/*`, `components/debrief/*`,
 `README.md`, `CLAUDE.md`, `LICENSE`, `.env.example`, `vercel.json`, `drizzle.config.ts`

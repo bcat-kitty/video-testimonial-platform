@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { vouchConfig } from '@/vouch.config';
+import { debriefConfig } from '@/debrief.config';
 
 export const metadata: Metadata = {
   title: 'Thank you',
@@ -14,7 +14,7 @@ export default function ThankYouPage() {
       </div>
       <h1 className="mb-4 text-3xl font-bold tracking-tight text-zinc-900">That is genuinely helpful.</h1>
       <p className="text-base leading-relaxed text-zinc-600">
-        Thank you for taking the time. {vouchConfig.senderName} will review it shortly, and it will
+        Thank you for taking the time. {debriefConfig.senderName} will review it shortly, and it will
         only appear publicly once it has been approved.
       </p>
     </main>

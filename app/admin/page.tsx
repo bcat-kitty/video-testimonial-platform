@@ -3,7 +3,7 @@ import { authConfigured, isAuthenticated, isOpenAdmin } from '@/lib/auth';
 import { emailEnabled } from '@/lib/email';
 import { aiEnabled } from '@/lib/ai';
 import { isDemoMode, listRequests, listTestimonials } from '@/lib/store';
-import { categoryLabel } from '@/vouch.config';
+import { categoryLabel } from '@/debrief.config';
 import type { Testimonial } from '@/lib/db/types';
 import LoginForm from './LoginForm';
 import SendRequestForm from './SendRequestForm';
@@ -16,7 +16,7 @@ import {
   toggleFeaturedAction,
 } from './actions';
 
-export const metadata: Metadata = { title: 'Vouch admin', robots: { index: false, follow: false } };
+export const metadata: Metadata = { title: 'Debrief admin', robots: { index: false, follow: false } };
 export const dynamic = 'force-dynamic';
 
 function Banner({ tone, children }: { tone: 'warn' | 'info'; children: React.ReactNode }) {

@@ -10,7 +10,7 @@ export const runtime = 'nodejs';
  *
  * Swapping storage: replace this route and the `upload()` call in
  * app/submit/TestimonialForm.tsx with your S3/R2 presigned-URL equivalent.
- * Nothing else in Vouch knows where the file lives, it only stores the URL.
+ * Nothing else in Debrief knows where the file lives, it only stores the URL.
  */
 
 // Blob matches these exactly, so the list has to be explicit. Phones and
@@ -71,7 +71,7 @@ export async function POST(request: Request): Promise<NextResponse> {
         };
       },
       onUploadCompleted: async ({ blob }) => {
-        console.log('[vouch] upload complete', blob.pathname);
+        console.log('[debrief] upload complete', blob.pathname);
       },
     });
     return NextResponse.json(jsonResponse);

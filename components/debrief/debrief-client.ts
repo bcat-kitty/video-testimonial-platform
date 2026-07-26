@@ -1,11 +1,11 @@
 /**
- * The only thing that talks to your Vouch instance.
+ * The only thing that talks to your Debrief instance.
  *
  * Copy this file (and its sibling components) into your own site. Point
- * NEXT_PUBLIC_VOUCH_URL at your deployed Vouch instance and you are done.
+ * NEXT_PUBLIC_DEBRIEF_URL at your deployed Debrief instance and you are done.
  */
 
-export interface VouchTestimonial {
+export interface DebriefTestimonial {
   id: string;
   name: string;
   role: string;
@@ -32,14 +32,14 @@ export interface FetchOptions {
   featured?: boolean;
   /** Seconds to cache. Defaults to 5 minutes. Use 0 to always hit the network. */
   revalidate?: number;
-  /** Override the instance URL instead of using NEXT_PUBLIC_VOUCH_URL. */
+  /** Override the instance URL instead of using NEXT_PUBLIC_DEBRIEF_URL. */
   baseUrl?: string;
 }
 
-export function vouchBaseUrl(override?: string): string {
-  const url = override || process.env.NEXT_PUBLIC_VOUCH_URL || '';
+export function debriefBaseUrl(override?: string): string {
+  const url = override || process.env.NEXT_PUBLIC_DEBRIEF_URL || '';
   if (!url) {
-    throw new Error('Set NEXT_PUBLIC_VOUCH_URL to your Vouch instance, e.g. https://testimonials.acme.com');
+    throw new Error('Set NEXT_PUBLIC_DEBRIEF_URL to your Debrief instance, e.g. https://testimonials.acme.com');
   }
   return url.replace(/\/$/, '');
 }
@@ -48,8 +48,8 @@ export function vouchBaseUrl(override?: string): string {
  * Approved testimonials only. This endpoint is public and read-only, so it is
  * safe to call from a browser as well as from the server.
  */
-export async function fetchTestimonials(opts: FetchOptions = {}): Promise<VouchTestimonial[]> {
-  const url = new URL(`${vouchBaseUrl(opts.baseUrl)}/api/public/testimonials`);
+export async function fetchTestimonials(opts: FetchOptions = {}): Promise<DebriefTestimonial[]> {
+  const url = new URL(`${debriefBaseUrl(opts.baseUrl)}/api/public/testimonials`);
   if (opts.category) url.searchParams.set('category', opts.category);
   if (opts.limit) url.searchParams.set('limit', String(opts.limit));
   if (opts.featured) url.searchParams.set('featured', 'true');
@@ -59,14 +59,14 @@ export async function fetchTestimonials(opts: FetchOptions = {}): Promise<VouchT
       next: { revalidate: opts.revalidate ?? 300 },
     });
     if (!res.ok) {
-      console.error('[vouch] fetch failed', res.status);
+      console.error('[debrief] fetch failed', res.status);
       return [];
     }
-    const data = (await res.json()) as { testimonials?: VouchTestimonial[] };
+    const data = (await res.json()) as { testimonials?: DebriefTestimonial[] };
     return data.testimonials ?? [];
   } catch (err) {
     // Never take the page down because the testimonial service is having a day.
-    console.error('[vouch] fetch error', err);
+    console.error('[debrief] fetch error', err);
     return [];
   }
 }

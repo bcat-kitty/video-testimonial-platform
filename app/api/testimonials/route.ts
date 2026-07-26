@@ -1,5 +1,5 @@
 import { NextResponse, after } from 'next/server';
-import { isValidCategory, vouchConfig } from '@/vouch.config';
+import { isValidCategory, debriefConfig } from '@/debrief.config';
 import { extractStructured, transcribeVideo } from '@/lib/ai';
 import { sendNewSubmissionNotification } from '@/lib/email';
 import { createTestimonial, findOpenRequest, updateRequest, updateTestimonial } from '@/lib/store';
@@ -59,7 +59,7 @@ export async function POST(request: Request) {
     if (!EMAIL_RE.test(email)) {
       return NextResponse.json({ success: false, error: 'That email does not look right.' }, { status: 400 });
     }
-    if (vouchConfig.categories.length > 0 && (!category || !isValidCategory(category))) {
+    if (debriefConfig.categories.length > 0 && (!category || !isValidCategory(category))) {
       return NextResponse.json({ success: false, error: 'Pick which service you used.' }, { status: 400 });
     }
     if (mode === 'text' && (!situationBefore || !whatChanged || !recommendation)) {
@@ -117,7 +117,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ success: true, id: created.id });
   } catch (err) {
-    console.error('[vouch] submit failed', err);
+    console.error('[debrief] submit failed', err);
     return NextResponse.json({ success: false, error: 'Something went wrong.' }, { status: 400 });
   }
 }

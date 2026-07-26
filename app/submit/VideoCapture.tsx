@@ -194,11 +194,11 @@ export default function VideoCapture({ onChange, maxBytes = DEFAULT_MAX }: Video
         <div className="space-y-3">
           <div className="flex flex-wrap gap-3">
             {canRecord && (
-              <button type="button" onClick={requestCamera} className="v-btn">
+              <button type="button" onClick={requestCamera} className="d-btn">
                 <span aria-hidden="true">●</span> Record now
               </button>
             )}
-            <label className="v-btn-secondary cursor-pointer">
+            <label className="d-btn-secondary cursor-pointer">
               <span aria-hidden="true">↑</span> Upload a video
               <input type="file" accept="video/*" onChange={handleFileFallback} className="sr-only" />
             </label>
@@ -232,7 +232,7 @@ export default function VideoCapture({ onChange, maxBytes = DEFAULT_MAX }: Video
           <div className="flex flex-wrap gap-3">
             {state === 'preview' ? (
               <>
-                <button type="button" onClick={startRecording} className="v-btn">
+                <button type="button" onClick={startRecording} className="d-btn">
                   <span aria-hidden="true">●</span> Start recording
                 </button>
                 <button
@@ -241,7 +241,7 @@ export default function VideoCapture({ onChange, maxBytes = DEFAULT_MAX }: Video
                     stopStream();
                     setState('idle');
                   }}
-                  className="v-btn-secondary"
+                  className="d-btn-secondary"
                 >
                   Cancel
                 </button>
@@ -250,7 +250,7 @@ export default function VideoCapture({ onChange, maxBytes = DEFAULT_MAX }: Video
               <button
                 type="button"
                 onClick={stopRecording}
-                className="v-btn bg-red-600 text-white hover:bg-red-700"
+                className="d-btn bg-red-600 text-white hover:bg-red-700"
               >
                 <span aria-hidden="true">■</span> Stop recording
               </button>
@@ -269,7 +269,7 @@ export default function VideoCapture({ onChange, maxBytes = DEFAULT_MAX }: Video
             className="mx-auto block max-h-[28vh] sm:max-h-[38vh] w-auto max-w-full rounded-xl bg-black"
           />
           <div className="flex items-center gap-4">
-            <button type="button" onClick={reset} className="v-btn-secondary">
+            <button type="button" onClick={reset} className="d-btn-secondary">
               Record again
             </button>
             <p className="font-mono text-xs text-zinc-500">
